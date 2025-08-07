@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Menu ORIF - Menu du jour</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f0f0f0;
+      overflow: hidden;
+    }
+
+    header {
+      width: 100%;
+      background-color: #2c3e50;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      box-sizing: border-box;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+    }
+
+    .date {
+      margin: 0;
+      font-size: 0.9em;
+    }
+
+    .user-options {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .user-options select,
+    .user-options a {
+      background-color: white;
+      color: #2c3e50;
+      border: none;
+      padding: 6px 12px;
+      text-decoration: none;
+      font-size: 0.9em;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .layout {
+      display: flex;
+      flex-direction: row;
+      height: 100vh;
+      padding-top: 80px; /* leave space for header */
+      box-sizing: border-box;
+    }
+
+    .sidebar {
+      width: 230px;
+      background: #34495e;
+      color: white;
+      padding: 10px;
+      box-sizing: border-box;
+      overflow-y: auto;
+    }
+
+    .content {
+      flex: 1;
+      padding: 10px;
+      overflow-y: auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      box-sizing: border-box;
+      align-content: flex-start;
+      height: calc(100vh - 80px - 50px); /* account for header and footer */
+    }
+
+    .section-card {
+      background-color: white;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      width: calc(33% - 10px);
+      min-width: 280px;
+      box-sizing: border-box;
+    }
+
+    .section-card img {
+      width: 100%;
+      border-radius: 6px;
+      margin-bottom: 10px;
+    }
+
+    .chef-photo {
+      width: 80px;
+      border-radius: 50%;
+    }
+
+    footer {
+      text-align: center;
+      padding: 8px;
+      background-color: #2c3e50;
+      font-size: 0.9em;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+    }
+
+    .footer-links {
+      margin-top: 4px;
+    }
+
+    .footer-links a {
+      color: #2c3e50;
+      text-decoration: none;
+      margin: 0 10px;
+      font-weight: 500;
+    }
+
+    .footer-links a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>Menu du jour – ORIF</h1>
+      <p class="date">Mercredi 6 août 2025</p>
+    </div>
+    <div class="user-options">
+      <a href="#">Sign Up</a>
+      <a href="#">Log In</a>
+      <select name="langue" id="langue">
+        <option value="fr">FR</option>
+        <option value="en">EN</option>
+        <option value="de">GR</option>
+      </select>
+    </div>
+  </header>
+
+  <div class="layout">
+    <div class="sidebar">
+      <h2>Navigation</h2>
+      <ul class="menu-nav">
+        <li><a href="#plat">Plat du jour</a></li>
+        <li><a href="#dessert">Dessert</a></li>
+        <li><a href="#self">Self-service</a></li>
+        <li><a href="#salades">Salades</a></li>
+        <li><a href="#vegetarien">Végétarien</a></li>
+        <li><a href="#allergenes">Allergènes</a></li>
+        <li><a href="#chef">Cuisinier</a></li>
+        <li><a href="#avis">Avis</a></li>
+        <li><a href="#horaires">Horaires</a></li>
+      </ul>
+      <div class="agenda">
+        <h3>Journées végétariennes</h3>
+        <ul>
+          <li>Lundi</li>
+          <li>Mercredi</li>
+          <li>Vendredi</li>
+        </ul>
+        <label for="filtre-date">Filtrer par date :</label>
+        <input type="date" id="filtre-date" />
+      </div>
+    </div>
+
+    <div class="content">
+      <section id="plat" class="section-card">
+        <h2>Plat du jour</h2>
+        <img src="plat_jour.jpg" alt="Poularde Morilles Vin jaune" />
+        <p><strong>Nom :</strong> Poulet au curry, riz basmati, légumes vapeur</p>
+        <p><strong>Description :</strong> Plat complet, équilibré et légèrement épicé.</p>
+      </section>
+
+      <section id="dessert" class="section-card">
+        <h2>Dessert du jour</h2>
+        <p>Crème brûlée maison avec éclats de caramel</p>
+      </section>
+
+      <section id="self" class="section-card">
+        <h2>Self-service du jour</h2>
+        <ul>
+          <li>Pâtes bolognaises</li>
+          <li>Pizza 4 fromages</li>
+          <li>Gratin de légumes</li>
+        </ul>
+      </section>
+
+      <section id="salades" class="section-card">
+        <h2>Bar à salades</h2>
+        <p>Composez votre salade avec :</p>
+        <ul>
+          <li>Laitue, roquette, carottes râpées</li>
+          <li>Œufs, thon, maïs, tomates cerises</li>
+          <li>Vinaigrette maison, sauce yogourt</li>
+        </ul>
+      </section>
+
+      <section id="vegetarien" class="section-card">
+        <h2>Plat végétarien</h2>
+        <p>Chili sin carne aux haricots rouges et riz parfumé.</p>
+      </section>
+
+      <section id="allergenes" class="section-card">
+        <h2>Ingrédients & Allergènes</h2>
+        <ul>
+          <li>Contient : gluten, lactose, œufs</li>
+          <li>Sans : arachides, fruits à coque</li>
+          <li>Option sans gluten disponible sur demande</li>
+        </ul>
+      </section>
+
+      <section id="chef" class="section-card">
+        <h2>Le Chef du jour : Monsieur Philippe Etchebest</h2>
+        <img src="Philippe_Etchebest.jpg" alt="Chef Philippe Etchebest" class="chef-photo" />
+        <p>Chef passionné par la cuisine du monde et la valorisation des produits locaux. Présent à l’ORIF depuis 8 ans.</p>
+      </section>
+
+      <section id="avis" class="section-card">
+        <h2>Votre avis compte</h2>
+        <form>
+          <label for="note">Notez le menu du jour :</label><br />
+          <select id="note" name="note">
+            <option value="5">⭐⭐⭐⭐⭐ Excellent</option>
+            <option value="4">⭐⭐⭐⭐ Très bon</option>
+            <option value="3">⭐⭐⭐ Bon</option>
+            <option value="2">⭐⭐ Moyen</option>
+            <option value="1">⭐ À améliorer</option>
+          </select><br />
+          <label for="commentaire">Laissez un commentaire :</label><br />
+          <textarea id="commentaire" rows="2"></textarea><br />
+          <button type="submit">Envoyer</button>
+        </form>
+      </section>
+
+      <section id="horaires" class="section-card">
+        <h2>Horaires d'ouverture</h2>
+        <ul>
+          <li><strong>Self-service :</strong> 11h30 – 14h00</li>
+          <li><strong>Cafétéria :</strong> 12h00 – 14h30</li>
+          <li><strong>Petit déjeuner :</strong> 07h30 – 09h30</li>
+        </ul>
+      </section>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 ORIF – Tous droits réservés</p>
+    <div class="footer-links">
+      <a href="#">Mentions légales</a>
+      <a href="#">Conditions d'utilisation</a>
+      <a href="#">Politique de confidentialité</a>
+      <a href="#">Accessibilité</a>
+    </div>
+  </footer>
+</body>
+</html>
