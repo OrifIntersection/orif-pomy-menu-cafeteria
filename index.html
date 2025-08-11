@@ -6,10 +6,14 @@
   <title>Menu ORIF - Menu du jour</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="responsive.css">
+
 </head>
 <body>
 
   <header>
+      <div class="logo-container">
+      <img src="logo-orif.png" alt="Logo ORIF" class="logo-orif">
+    </div>
     <div>
       <h1>Menu du jour – ORIF-POMY</h1>
       <p class="date">Mercredi 6 août 2025</p>
@@ -23,10 +27,10 @@
         <option value="de">GR</option>
       </select>
     </div>
+
   </header>
 
   <div class="main-layout">
-    
     <div class="sidebar-placeholder"></div>
 
     <aside class="sidebar">
@@ -50,6 +54,11 @@
     <main class="content">
       <section id="plat" class="section-card">
         <h2>Plat du jour</h2>
+        <div class="badges">
+          <span class="badge badge--warn" title="Contient du gluten"><span class="emoji">🌾</span> Gluten</span>
+          <span class="badge badge--warn" title="Contient du lactose"><span class="emoji">🥛</span> Lactose</span>
+          <span class="badge badge--warn" title="Contient des œufs"><span class="emoji">🥚</span> Œuf</span>
+        </div>
         <img src="plat_jour.jpg" alt="Poularde Morilles Vin jaune">
         <p><strong>Nom :</strong> Poulet au curry, riz basmati, légumes vapeur</p>
         <p><strong>Description :</strong> Plat complet, équilibré et légèrement épicé.</p>
@@ -57,6 +66,10 @@
 
       <section id="dessert" class="section-card">
         <h2>Dessert du jour</h2>
+        <div class="badges">
+          <span class="badge badge--warn" title="Contient du lactose"><span class="emoji">🥛</span> Lactose</span>
+          <span class="badge badge--warn" title="Contient des œufs"><span class="emoji">🥚</span> Œuf</span>
+        </div>
         <p>Crème brûlée maison avec éclats de caramel</p>
       </section>
 
@@ -81,6 +94,9 @@
 
       <section id="vegetarien" class="section-card">
         <h2>Plat végétarien</h2>
+        <div class="badges">
+          <span class="badge badge--veg" title="Plat végétarien"><span class="emoji">🥦</span> Végé</span>
+        </div>
         <p>Chili sin carne aux haricots rouges et riz parfumé.</p>
       </section>
     </main>
@@ -107,9 +123,15 @@
 
       <section id="allergenes" class="section-card">
         <h2>Ingrédients & Allergènes</h2>
+        <div class="badges">
+          <span class="badge badge--warn"><span class="emoji">🌾</span> Gluten</span>
+          <span class="badge badge--warn"><span class="emoji">🥛</span> Lactose</span>
+          <span class="badge badge--warn"><span class="emoji">🥚</span> Œuf</span>
+          <span class="badge badge--alert"><span class="emoji">🥜</span> Fruits à coque</span>
+        </div>
         <ul>
           <li>Contient : gluten, lactose, œufs</li>
-          <li>Sans : arachides, fruits à coque</li>
+          <li>Sans : arachides</li>
           <li>Option sans gluten disponible sur demande</li>
         </ul>
       </section>
@@ -128,7 +150,6 @@
         </ul>
       </section>
     </aside>
-
   </div>
 
   <footer>
