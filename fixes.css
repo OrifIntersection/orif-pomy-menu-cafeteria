@@ -1,0 +1,426 @@
+/* CORRECTIONS VISUELLES FORCÉES - VERSION 2025-08-13 */
+
+/* 1. COLONNE DROITE - Fond bleu foncé avec texte blanc */
+.sidebar-combined {
+  background: #2c3e50 !important;
+  border-radius: 10px !important;
+  padding: 1rem !important;
+  box-shadow: 0 4px 15px rgba(0,0,0,.08) !important;
+  color: white !important;
+  z-index: 10 !important;
+  position: relative !important;
+}
+
+/* Texte blanc ABSOLU pour TOUS les éléments dans la sidebar */
+.sidebar-combined,
+.sidebar-combined *:not(input):not(select):not(option),
+.sidebar-combined h1,
+.sidebar-combined h2,
+.sidebar-combined h3,
+.sidebar-combined h4,
+.sidebar-combined h5,
+.sidebar-combined h6,
+.sidebar-combined p,
+.sidebar-combined span,
+.sidebar-combined div,
+.sidebar-combined label,
+.sidebar-combined .agenda-section h3,
+.sidebar-combined .info-section h3,
+.sidebar-combined .info-section p,
+.sidebar-combined .section,
+.sidebar-combined .section h3,
+.sidebar-combined .section p,
+.sidebar-combined .section span,
+.sidebar-combined .section div,
+.sidebar-combined .agenda-item,
+.sidebar-combined .agenda-item label,
+.sidebar-combined .agenda-item span,
+.sidebar-combined .agenda-item div {
+  color: white !important;
+  text-shadow: none !important;
+}
+
+/* Forcer la visibilité du texte - ABSOLUMENT VISIBLE */
+.sidebar-combined .section h3,
+.sidebar-combined h3 {
+  color: #ffffff !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  background: none !important;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.5) !important;
+  font-weight: bold !important;
+}
+
+.sidebar-combined .section p,
+.sidebar-combined .section span,
+.sidebar-combined .section div:not(input),
+.sidebar-combined p,
+.sidebar-combined span,
+.sidebar-combined div:not(input) {
+  color: #ffffff !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  background: none !important;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3) !important;
+}
+
+/* AGENDA spécifiquement */
+.sidebar-combined .agenda-section h3 {
+  color: #ffffff !important;
+  background: rgba(255,255,255,0.1) !important;
+  padding: 0.5rem !important;
+  border-radius: 5px !important;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.8) !important;
+  font-weight: bold !important;
+  font-size: 1.2rem !important;
+}
+
+/* Boutons dans la sidebar */
+.sidebar-combined button {
+  background: #e67e22 !important;
+  color: white !important;
+  border: none !important;
+  padding: 8px 16px !important;
+  border-radius: 5px !important;
+  cursor: pointer !important;
+}
+
+.sidebar-combined button:hover {
+  background: #d35400 !important;
+}
+
+.sidebar-combined .section {
+  background: #34495e !important;
+  border-radius: 8px !important;
+  padding: 1rem !important;
+  margin-bottom: 1rem !important;
+}
+
+.sidebar-combined h3, 
+.sidebar-combined label, 
+.sidebar-combined p,
+.sidebar-combined * {
+  color: #fff !important;
+}
+
+.sidebar-combined input[type="date"] {
+  color: #333 !important;
+  background: #fff !important;
+}
+
+.sidebar-combined .agenda-item label {
+  color: #fff !important;
+}
+
+/* 2. FORMULAIRES - Contraste fixé */
+input, textarea, select {
+  background: #fff !important;
+  color: #333 !important;
+  border: 1px solid #ddd !important;
+}
+
+label {
+  color: #333 !important;
+}
+
+/* 3. ADMIN - Section chef lisible avec texte blanc sur fond gris */
+.form-grid > div {
+  background: #b8b6b6 !important;
+  color: #333 !important;
+}
+
+/* UNIQUEMENT pour le texte de version démo, titre et label Date */
+.admin-wrap .section-card h2,
+.admin-wrap .demo-version-text,
+.admin-wrap label[for="date"] {
+  color: #ffffff !important;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.8) !important;
+  font-weight: bold !important;
+  font-size: 16px !important;
+}
+
+/* Remettre les formulaires en normal */
+.form-grid h3, 
+.form-grid label, 
+.form-grid p {
+  color: #333 !important;
+  text-shadow: none !important;
+  font-weight: normal !important;
+}
+
+.form-grid input,
+.form-grid textarea,
+.form-grid select,
+.admin-wrap input,
+.admin-wrap textarea,
+.admin-wrap select {
+  color: #333 !important;
+  background: #ffffff !important;
+}
+
+/* 2. HEADER - Boutons identiques même taille */
+.user-options .btn,
+.user-options button.btn {
+  padding: 0.6rem 1.2rem !important;
+  color: white !important;
+  text-shadow: none !important;
+  min-width: 120px !important;
+  height: 40px !important;
+  box-sizing: border-box !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  border: none !important;
+  cursor: pointer !important;
+  text-decoration: none !important;
+  font-size: 14px !important;
+}
+
+/* Section chef spécifique */
+.chef-section > div {
+  background: #d5d5d5 !important;
+}
+
+.chef-section h3,
+.chef-section label,
+.chef-section p,
+.chef-section input,
+.chef-section textarea {
+  color: #000 !important;
+}
+
+/* 4. BOUTONS - Couleur orange */
+.btn, .btn-mini, button {
+  background: #e67e22 !important;
+  color: #fff !important;
+  border: none !important;
+  padding: 0.5rem 1rem !important;
+  border-radius: 5px !important;
+  cursor: pointer !important;
+}
+
+.btn:hover, .btn-mini:hover, button:hover {
+  background: #d35400 !important;
+}
+
+/* 5. PAGE RACCOURCIE - Contenu plus étroit */
+.content {
+  max-width: 750px !important;
+}
+
+/* CHEF ET HORAIRES - Masqués du contenu principal */
+#chef, #horaires {
+  display: none !important;
+}
+
+/* NAVIGATION - Mise à jour des liens */
+.nav-item[href="#chef"] {
+  pointer-events: none !important;
+  opacity: 0.5 !important;
+}
+
+.nav-item[href="#horaires"] {
+  pointer-events: none !important;
+  opacity: 0.5 !important;
+}
+
+/* 6. BOUTONS HEADER - Style uniforme */
+.user-options .btn,
+#account-area .btn,
+#account-area button {
+  background: #3498db !important;
+  color: #fff !important;
+  border: 1px solid #2980b9 !important;
+  padding: 0.4rem 0.8rem !important;
+  border-radius: 4px !important;
+  text-decoration: none !important;
+  font-size: 0.9rem !important;
+  margin: 0 0.2rem !important;
+  display: inline-block !important;
+}
+
+.user-options .btn:hover,
+#account-area .btn:hover,
+#account-area button:hover {
+  background: #2980b9 !important;
+  border-color: #21618c !important;
+}
+
+.btn-outline {
+  background: transparent !important;
+  color: #3498db !important;
+  border: 1px solid #3498db !important;
+}
+
+.btn-outline:hover {
+  background: #3498db !important;
+  color: #fff !important;
+}
+
+/* RESPONSIVE DESIGN - Optimisé pour écrans larges horizontaux */
+
+/* Très grands écrans horizontaux (1600px+) - Utilisation complète de l'espace */
+@media (min-width: 1600px) {
+  body {
+    margin: 0 !important;
+    padding-top: 0 !important;
+  }
+  
+  .main-layout {
+    grid-template-columns: 1fr 400px !important;
+    gap: 3rem !important;
+    max-width: none !important;
+    padding: 1rem 3rem !important;
+    margin-top: 0 !important;
+  }
+  
+  .content {
+    max-width: none !important;
+    width: 100% !important;
+    z-index: 1 !important;
+    position: relative !important;
+  }
+  
+  .sidebar-combined {
+    width: 400px !important;
+    position: sticky !important;
+    top: 2rem !important;
+    height: fit-content !important;
+    z-index: 10 !important;
+  }
+  
+  header {
+    z-index: 100 !important;
+    position: relative !important;
+  }
+}
+
+/* Grands écrans horizontaux (1200px-1599px) */
+@media (min-width: 1200px) and (max-width: 1599px) {
+  .main-layout {
+    grid-template-columns: 1fr 350px !important;
+    gap: 2rem !important;
+    max-width: none !important;
+    padding: 1rem 2rem !important;
+  }
+  
+  .content {
+    max-width: none !important;
+    width: 100% !important;
+    z-index: 1 !important;
+    position: relative !important;
+  }
+  
+  .sidebar-combined {
+    width: 350px !important;
+    position: sticky !important;
+    top: 2rem !important;
+    height: fit-content !important;
+    z-index: 10 !important;
+  }
+}
+
+/* Écrans moyens (992px-1199px) - Tablettes horizontales */
+@media (min-width: 992px) and (max-width: 1199px) {
+  .content {
+    max-width: 650px !important;
+  }
+  .sidebar-combined {
+    width: 250px !important;
+    right: 1rem !important;
+  }
+}
+
+/* Tablettes moyennes (768px-991px) - GARDENT la sidebar à droite */
+@media (min-width: 768px) and (max-width: 991px) {
+  .main-layout {
+    grid-template-columns: 1fr 250px !important;
+    gap: 1rem !important;
+  }
+  
+  .sidebar-combined {
+    width: 250px !important;
+    position: sticky !important;
+    top: 1rem !important;
+    height: fit-content !important;
+  }
+  
+  .content {
+    max-width: none !important;
+  }
+}
+
+/* Smartphones horizontaux (576px-767px) - Sidebar en bas */
+@media (min-width: 576px) and (max-width: 767px) {
+  .main-layout {
+    grid-template-columns: 1fr !important;
+    grid-template-areas: 
+      "main"
+      "sidebar" !important;
+    gap: 1rem !important;
+  }
+  
+  .sidebar-combined {
+    position: relative !important;
+    width: 100% !important;
+    top: auto !important;
+    height: auto !important;
+  }
+  
+  .content {
+    max-width: 100% !important;
+  }
+  
+  .nav-container {
+    flex-wrap: wrap !important;
+    gap: 0.5rem !important;
+  }
+  
+  .nav-divider {
+    display: none !important;
+  }
+}
+
+/* Smartphones verticaux (320px-575px) - Sidebar en bas */
+@media (max-width: 575px) {
+  .main-layout {
+    grid-template-columns: 1fr !important;
+    grid-template-areas: 
+      "main"
+      "sidebar" !important;
+    gap: 1rem !important;
+  }
+  
+  .sidebar-combined {
+    position: relative !important;
+    width: 100% !important;
+    top: auto !important;
+    height: auto !important;
+    padding: 0.8rem !important;
+  }
+  
+  .sidebar-combined .section {
+    padding: 0.8rem !important;
+  }
+  
+  .content {
+    max-width: 100% !important;
+    padding: 1rem !important;
+  }
+  
+  .nav-container {
+    flex-direction: column !important;
+    gap: 0.3rem !important;
+  }
+  
+  .nav-item {
+    width: 100% !important;
+    text-align: center !important;
+    padding: 0.8rem !important;
+  }
+  
+  .nav-divider {
+    display: none !important;
+  }
+}
