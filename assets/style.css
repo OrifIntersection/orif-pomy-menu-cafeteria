@@ -140,7 +140,7 @@ select option{ font-size:1rem; }
 
 /* ===== Footer fixe ===== */
 footer{
-  background:#2e3135; color:#fff; padding:1rem; text-align:center;
+  background:#2e3135; color:#ffffff; padding:1rem; text-align:center;
   position:fixed; bottom:0; left:0; right:0; z-index:1000;
 }
 footer p{ margin-bottom:1rem; font-size:.9rem; }
