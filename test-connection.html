@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Connexion</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 2rem; }
+        .result { margin: 1rem 0; padding: 1rem; border-radius: 5px; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        button { background: #007bff; color: white; border: none; padding: 0.5rem 1rem; border-radius: 5px; margin: 0.5rem; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Test de Connexion ORIF</h1>
+    
+    <h2>Connexion Admin</h2>
+    <button onclick="testAdminLogin()">Tester Admin (ayesh.admin@orif.ch/0000)</button>
+    <div id="admin-result"></div>
+    
+    <h2>Connexion Membre</h2>
+    <button onclick="testMemberLogin()">Tester Membre (ayesh.benef@orif.ch/0000)</button>
+    <div id="member-result"></div>
+    
+    <h2>Déconnexion</h2>
+    <button onclick="testLogout()">Se déconnecter</button>
+    <div id="logout-result"></div>
+    
+    <h2>État Actuel</h2>
+    <button onclick="checkCurrentState()">Vérifier état</button>
+    <div id="state-result"></div>
+    
+    <script src="assets/app.js"></script>
+    <script>
+        function testAdminLogin() {
+            const result = login("ayesh.admin@orif.ch", "0000");
+            const div = document.getElementById("admin-result");
+            if (result) {
+                div.innerHTML = `<div class="result success">✓ Connexion admin réussie: ${result.name} (${result.role})</div>`;
+            } else {
+                div.innerHTML = `<div class="result error">✗ Échec connexion admin</div>`;
+            }
+        }
+        
+        function testMemberLogin() {
+            const result = login("ayesh.benef@orif.ch", "0000");
+            const div = document.getElementById("member-result");
+            if (result) {
+                div.innerHTML = `<div class="result success">✓ Connexion membre réussie: ${result.name} (${result.role})</div>`;
+            } else {
+                div.innerHTML = `<div class="result error">✗ Échec connexion membre</div>`;
+            }
+        }
+        
+        function testLogout() {
+            logout();
+            const div = document.getElementById("logout-result");
+            div.innerHTML = `<div class="result success">✓ Déconnexion effectuée</div>`;
+        }
+        
+        function checkCurrentState() {
+            const user = currentUser();
+            const div = document.getElementById("state-result");
+            if (user) {
+                div.innerHTML = `<div class="result success">✓ Connecté: ${user.name} (${user.role})</div>`;
+            } else {
+                div.innerHTML = `<div class="result error">✗ Non connecté</div>`;
+            }
+        }
+        
+        // Vérifier l'état au chargement
+        document.addEventListener('DOMContentLoaded', checkCurrentState);
+    </script>
+</body>
+</html>

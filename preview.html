@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Aperçu du Menu - ORIF-POMY</title>
+  <link rel="stylesheet" href="assets/style.css"/>
+  <link rel="stylesheet" href="assets/responsive.css"/>
+  <link rel="stylesheet" href="three-column-layout.css"/>
+</head>
+<body>
+  <header>
+    <div class="logo-container">
+      <img src="public/images/logo-orif.png" alt="Logo ORIF" class="logo-orif" />
+      <div>
+        <h1>Aperçu du Menu – ORIF-POMY</h1>
+        <p class="date" id="preview-date">Menu enregistré</p>
+      </div>
+    </div>
+
+    <div class="user-options">
+      <a class="btn" href="index.html">Accueil</a>
+      <a class="btn btn-outline" href="admin.html">Retour Admin</a>
+    </div>
+  </header>
+
+  <div class="main-layout">
+    <main class="content">
+      <!-- Message de succès -->
+      <div style="background: #d4edda; border: 1px solid #c3e6cb; color: #155724; padding: 1rem; border-radius: 8px; margin-bottom: 2rem;">
+        <h3>✅ Menu enregistré avec succès !</h3>
+        <p>Voici un aperçu de votre menu tel qu'il apparaîtra aux utilisateurs.</p>
+      </div>
+
+      <!-- PLAT DU JOUR -->
+      <section id="plat" class="section-card">
+        <h2>Plat du jour</h2>
+        <div class="badges" id="plat-badges"></div>
+        <img id="plat-img" src="plat_jour.jpg" alt="Plat du jour"/>
+        <p><strong>Nom :</strong> <span id="plat-nom">Plat du jour</span></p>
+        <p><strong>Description :</strong> <span id="plat-desc">Description du plat</span></p>
+      </section>
+
+      <!-- DESSERT -->
+      <section id="dessert" class="section-card">
+        <h2>Dessert du jour</h2>
+        <div class="badges" id="dessert-badges"></div>
+        <p id="dessert-content">Dessert du jour</p>
+      </section>
+
+      <!-- SELF -->
+      <section id="self" class="section-card">
+        <h2>Self-service du jour</h2>
+        <ul id="self-list">
+          <li>Aucun item self-service</li>
+        </ul>
+      </section>
+
+      <!-- SALADES -->
+      <section id="salades" class="section-card">
+        <h2>Bar à salades</h2>
+        <ul id="salades-list">
+          <li>Aucun item salade</li>
+        </ul>
+      </section>
+
+      <!-- VÉGÉ -->
+      <section id="vegetarien" class="section-card">
+        <h2>Plat végétarien</h2>
+        <p id="veg-content">Aucun plat végétarien</p>
+      </section>
+
+      <!-- Actions -->
+      <section class="section-card">
+        <h3>Actions disponibles</h3>
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+          <a class="btn" href="index.html">Voir sur la page publique</a>
+          <a class="btn btn-outline" href="admin.html">Modifier ce menu</a>
+          <button class="btn btn-delete" onclick="supprimerMenuActuel()">Supprimer ce menu</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <footer>
+    <p>© 2025 ORIF – Tous droits réservés</p>
+  </footer>
+
+  <script src="assets/app.js"></script>
+  <script src="admin.js"></script>
+  <script>
+    // Charger et afficher le menu enregistré
+    document.addEventListener('DOMContentLoaded', () => {
+      const menuData = JSON.parse(localStorage.getItem('orif_menu_data') || '{}');
+      
+      if (menuData.today) {
+        // Mettre à jour la date
+        const dateElement = document.getElementById('preview-date');
+        if (dateElement && menuData.today.date) {
+          const formatDate = new Date(menuData.today.date).toLocaleDateString('fr-FR', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+          });
+          dateElement.textContent = formatDate;
+        }
+
+        // Charger le menu
+        chargerMenuDuJour();
+      } else {
+        document.querySelector('main').innerHTML = `
+          <div class="section-card">
+            <h2>Aucun menu trouvé</h2>
+            <p>Aucun menu n'a été enregistré récemment.</p>
+            <a class="btn" href="admin.html">Créer un nouveau menu</a>
+          </div>
+        `;
+      }
+    });
+
+    // Fonction pour supprimer le menu actuel
+    function supprimerMenuActuel() {
+      if (confirm('Êtes-vous sûr de vouloir supprimer ce menu ? Cette action est irréversible.')) {
+        supprimerMenu();
+        alert('Menu supprimé avec succès.');
+        window.location.href = 'admin.html';
+      }
+    }
+  </script>
+</body>
+</html>

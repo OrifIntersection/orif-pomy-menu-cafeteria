@@ -124,6 +124,7 @@ form{ display:flex; flex-direction:column; gap:1rem; }
 form label{ font-weight:600; color:#2c3e50; margin-bottom:.25rem; }
 form select, form textarea{
   padding:.75rem; border:2px solid #454747; border-radius:5px; font-size:.9rem; font-family:inherit; transition:.3s;
+  background:#fff; color:#333 !important;
 }
 form select:focus, form textarea:focus{ outline:none; border-color:#3498db; box-shadow:0 0 0 3px rgba(52,152,219,.1); }
 form button{
@@ -170,3 +171,27 @@ a:focus, button:focus, input:focus, select:focus, textarea:focus{
   .main-layout{ grid-template-columns:1fr; gap:1rem; margin:0; padding:0; }
   .section-card{ box-shadow:none; border:1px solid #ddd; break-inside:avoid; }
 }
+#account-area { display:flex; align-items:center; gap:.5rem; }
+.user-chip { background:#fff2; color:#fff; padding:.35rem .6rem; border-radius:999px; font-size:.9rem; }
+.btn { background:#fff; color:#2c3e50; padding:.45rem .8rem; border-radius:6px; text-decoration:none; border:0; cursor:pointer; }
+.btn:hover { opacity:.9; }
+.btn-outline { background:transparent; color:#fff; border:1px solid #fff; }
+#account-area {
+  display: inline-block;
+  margin-left: 1rem;
+}
+
+/* Styles pour la zone compte dans le header */
+#account-area { display:flex; align-items:center; gap:.6rem; }
+.user-chip {
+  padding:.35rem .6rem; border-radius:999px;
+  background:rgba(255,255,255,.08); color:#fff; font-size:.9rem;
+  border:1px solid rgba(255,255,255,.18);
+}
+.btn {
+  display:inline-block; padding:.5rem .9rem; border-radius:8px;
+  background:transparent; color:#fff; border:1px solid rgba(255,255,255,.35);
+  text-decoration:none; transition:.2s; cursor:pointer;
+}
+.btn:hover { background:rgba(255,255,255,.14); }
+.btn-outline { background:transparent; }

@@ -1,126 +1,115 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Menu ORIF - Menu du jour</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="responsive.css">
-
+  <link rel="stylesheet" href="assets/style.css"/>
+  <link rel="stylesheet" href="assets/responsive.css"/>
+  <link rel="stylesheet" href="three-column-layout.css"/>
+  <link rel="stylesheet" href="fixes.css"/>
 </head>
 <body>
-
   <header>
-      <div class="logo-container">
-      <img src="logo-orif.png" alt="Logo ORIF" class="logo-orif">
+    <div class="logo-container">
+      <img src="public/images/logo-orif.png" alt="Logo ORIF" class="logo-orif" />
+      <div>
+        <h1>Menu du jour – ORIF-POMY</h1>
+        <p class="date" id="date-actuelle">Mercredi 14 août 2025</p>
+      </div>
     </div>
-    <div>
-      <h1>Menu du jour – ORIF-POMY</h1>
-      <p class="date">Mercredi 6 août 2025</p>
-    </div>
+
     <div class="user-options">
-      <a href="#">Sign Up</a>
-      <a href="#">Log In</a>
+      <div id="account-area">
+        <a class="btn" href="login.html">Se connecter</a>
+      </div>
       <select name="langue" id="langue">
         <option value="fr">FR</option>
         <option value="en">EN</option>
-        <option value="de">GR</option>
+        <option value="de">DE</option>
       </select>
     </div>
-
   </header>
 
+  <nav class="header-nav">
+    <div class="nav-container">
+      <a href="#plat" class="nav-item active">Plat du jour</a>
+      <span class="nav-divider">|</span>
+      <a href="#dessert" class="nav-item">Dessert</a>
+      <span class="nav-divider">|</span>
+      <a href="#self" class="nav-item">Self-service</a>
+      <span class="nav-divider">|</span>
+      <a href="#salades" class="nav-item">Salades</a>
+      <span class="nav-divider">|</span>
+      <a href="#vegetarien" class="nav-item">Plat végétarien</a>
+    </div>
+  </nav>
+
   <div class="main-layout">
-    <div class="sidebar-placeholder"></div>
-
-    <aside class="sidebar">
-      <ul class="menu-nav">
-        <li><a href="#plat">Plat du jour</a></li>
-        <li><a href="#dessert">Dessert</a></li>
-        <li><a href="#self">Self-service</a></li>
-        <li><a href="#salades">Salades</a></li>
-        <li><a href="#vegetarien">Plat végétarien</a></li>
-        <li><a href="#avis">Avis</a></li>
-        <li><a href="#allergenes">Allergènes</a></li>
-        <li><a href="#chef">Cuisinier</a></li>
-        <li><a href="#horaires">Horaires</a></li>
-      </ul>
-      <div class="agenda">
-        <label for="filtre-date">Filtrer par date :</label>
-        <input type="date" id="filtre-date">
-      </div>
-    </aside>
-
+    <!-- Contenu principal large -->
     <main class="content">
+
+      <!-- PLAT DU JOUR -->
       <section id="plat" class="section-card">
         <h2>Plat du jour</h2>
-        <div class="badges">
-          <span class="badge badge--warn" title="Contient du gluten"><span class="emoji">🌾</span> Gluten</span>
-          <span class="badge badge--warn" title="Contient du lactose"><span class="emoji">🥛</span> Lactose</span>
-          <span class="badge badge--warn" title="Contient des œufs"><span class="emoji">🥚</span> Œuf</span>
+        <div class="badges" id="plat-badges"></div>
+        <img id="plat-img" src="public/images/plat_jour.jpg" alt="Plat du jour"/>
+        <p><strong>Nom :</strong> <span id="plat-nom">Poulet au curry</span></p>
+        <p><strong>Description :</strong> <span id="plat-desc">Riz basmati, légumes vapeur</span></p>
+        
+        <!-- Section avis attachée au menu du jour -->
+        <div id="avis-section">
+          <div class="avis-header-section">
+            <h3>Avis sur le menu d'aujourd'hui</h3>
+            <button id="open-rating-popup" class="btn btn-rating">Donner mon avis</button>
+          </div>
+          <div id="moyenne-avis" style="display:none;">Moyenne : <span id="moyenne-note">0</span>/5</div>
+          <ul id="avis-list">
+            <li style="color:#666;font-style:italic;">Aucun avis pour aujourd'hui</li>
+          </ul>
         </div>
-        <img src="plat_jour.jpg" alt="Poularde Morilles Vin jaune">
-        <p><strong>Nom :</strong> Poulet au curry, riz basmati, légumes vapeur</p>
-        <p><strong>Description :</strong> Plat complet, équilibré et légèrement épicé.</p>
       </section>
 
+      <!-- DESSERT -->
       <section id="dessert" class="section-card">
         <h2>Dessert du jour</h2>
-        <div class="badges">
-          <span class="badge badge--warn" title="Contient du lactose"><span class="emoji">🥛</span> Lactose</span>
-          <span class="badge badge--warn" title="Contient des œufs"><span class="emoji">🥚</span> Œuf</span>
-        </div>
-        <p>Crème brûlée maison avec éclats de caramel</p>
+        <div class="badges" id="dessert-badges"></div>
+        <p id="dessert-content">Crème brûlée maison avec éclats de caramel</p>
       </section>
 
+      <!-- SELF -->
       <section id="self" class="section-card">
         <h2>Self-service du jour</h2>
-        <ul>
+        <ul id="self-list">
           <li>Pâtes bolognaises</li>
           <li>Pizza 4 fromages</li>
           <li>Gratin de légumes</li>
         </ul>
       </section>
 
+      <!-- SALADES -->
       <section id="salades" class="section-card">
         <h2>Bar à salades</h2>
         <p>Composez votre salade avec :</p>
-        <ul>
+        <ul id="salades-list">
           <li>Laitue, roquette, carottes râpées</li>
           <li>Œufs, thon, maïs, tomates cerises</li>
           <li>Vinaigrette maison, sauce yogourt</li>
         </ul>
       </section>
 
+      <!-- VÉGÉ -->
       <section id="vegetarien" class="section-card">
         <h2>Plat végétarien</h2>
         <div class="badges">
           <span class="badge badge--veg" title="Plat végétarien"><span class="emoji">🥦</span> Végé</span>
         </div>
-        <p>Chili sin carne aux haricots rouges et riz parfumé.</p>
-      </section>
-    </main>
-
-    <div class="right-column-placeholder"></div>
-
-    <aside class="right-column">
-      <section id="avis" class="section-card">
-        <h2>Votre avis compte</h2>
-        <form>
-          <label for="note">Notez le menu du jour :</label><br>
-          <select id="note" name="note">
-            <option value="5">⭐⭐⭐⭐⭐ Excellent</option>
-            <option value="4">⭐⭐⭐⭐ Très bon</option>
-            <option value="3">⭐⭐⭐ Bon</option>
-            <option value="2">⭐⭐ Moyen</option>
-            <option value="1">⭐ À améliorer</option>
-          </select><br>
-          <label for="commentaire">Laissez un commentaire :</label><br>
-          <textarea id="commentaire" rows="2"></textarea><br>
-          <button type="submit">Envoyer</button>
-        </form>
+        <p id="veg-content">Chili sin carne aux haricots rouges et riz parfumé.</p>
       </section>
 
+
+
+      <!-- ALLERGÈNES -->
       <section id="allergenes" class="section-card">
         <h2>Ingrédients & Allergènes</h2>
         <div class="badges">
@@ -136,20 +125,102 @@
         </ul>
       </section>
 
-      <section id="chef" class="section-card">
-        <h2>Le Chef du jour : Monsieur Philippe Etchebest</h2>
-        <img src="Philippe_Etchebest.jpg" alt="Chef Philippe Etchebest" class="chef-photo">
-        <p>Chef passionné par la cuisine du monde et la valorisation des produits locaux. Présent à l’ORIF depuis 8 ans.</p>
-      </section>
 
-      <section id="horaires" class="section-card">
-        <h2>Horaires d'ouverture</h2>
-        <ul>
-          <li><strong>Petit déjeuner :</strong> 07h05 – 07h45</li>
-          <li><strong>Cafétéria :</strong> 12h00 – 12h45</li>
+    </main>
+
+    <!-- Sidebar unique combinée -->
+    <aside class="sidebar-combined">
+      <div class="section">
+        <h3>Agenda</h3>
+        <div class="agenda">
+          <label for="filtre-date">Filtrer par date :</label>
+          <input type="date" id="filtre-date" />
+          <button id="btn-chercher-menu" class="btn-mini" style="margin: 0.5rem 0;">Chercher menu</button>
+          <div id="recherche-status" style="margin-top: 0.5rem; font-size: 0.9rem; color: #666;"></div>
+        </div>
+        <div id="menu-history">
+          <!-- Les menus enregistrés apparaîtront ici -->
+        </div>
+        <div class="agenda-item">
+          <label>
+            <input type="checkbox" /> 
+            Formation cuisine - Jeudi 15/08
+          </label>
+        </div>
+        <div class="agenda-item">
+          <label>
+            <input type="checkbox" /> 
+            Soirée dégustation - Vendredi 16/08
+          </label>
+        </div>
+      </div>
+
+      <!-- CHEF déplacé dans la colonne de droite -->
+      <div class="section">
+        <h3>👨‍🍳 Chef du jour</h3>
+        <img id="chef-photo-sidebar" src="public/images/Philippe_Etchebest.jpg" alt="Chef" style="width:60px;height:60px;border-radius:50%;object-fit:cover;float:left;margin:0 0.5rem 0.5rem 0;"/>
+        <p style="font-size:0.9rem;margin-bottom:0.3rem;"><strong id="chef-nom-sidebar">Philippe Etchebest</strong></p>
+        <p id="chef-description-sidebar" style="font-size:0.8rem;color:#666;clear:both;line-height:1.3;">Chef passionné par la cuisine du monde et la valorisation des produits locaux.</p>
+        <div id="chef-admin-controls" style="margin-top: 0.5rem; display: none;">
+          <a href="chef-management.html" class="btn-mini" style="font-size:0.75rem;padding:0.3rem 0.6rem;">✏️ Modifier</a>
+        </div>
+      </div>
+
+      <!-- HORAIRES déplacés dans la colonne de droite -->
+      <div class="section">
+        <h3>🕐 Horaires</h3>
+        <ul style="list-style:none;padding:0;font-size:0.85rem;margin:0;">
+          <li style="margin:0.3rem 0;color:#555;"><strong>Petit déjeuner :</strong> 07h05 – 07h45</li>
+          <li style="margin:0.3rem 0;color:#555;"><strong>Cafétéria :</strong> 12h00 – 12h45</li>
         </ul>
-      </section>
+      </div>
+
+      <div class="section">
+        <h3>Informations</h3>
+        <p style="color: #666; font-size: 0.9rem; line-height: 1.4;">
+          Retrouvez ici les dernières actualités de la cafétéria ORIF-POMY.
+        </p>
+        <ul style="font-size: 0.85rem; color: #555; line-height: 1.4;">
+          <li>Nouvelle carte des desserts</li>
+          <li>Produits locaux privilégiés</li>
+          <li>Options végétariennes étendues</li>
+        </ul>
+      </div>
     </aside>
+  </div>
+
+  <!-- Popup pour donner un avis -->
+  <div id="rating-popup" class="popup-overlay" style="display: none;">
+    <div class="popup-content">
+      <div class="popup-header">
+        <h3>Votre avis compte</h3>
+        <button id="close-rating-popup" class="popup-close">×</button>
+      </div>
+      <div class="popup-body">
+        <div id="rating-form-popup">
+          <p>Notez le menu d'aujourd'hui :</p>
+          <div class="rating-stars">
+            <span class="star" data-rating="1">★</span>
+            <span class="star" data-rating="2">★</span>
+            <span class="star" data-rating="3">★</span>
+            <span class="star" data-rating="4">★</span>
+            <span class="star" data-rating="5">★</span>
+          </div>
+          <textarea id="comment-popup" placeholder="Votre commentaire (optionnel)..." rows="3"></textarea>
+          <div class="popup-actions">
+            <button id="submit-rating-popup" class="btn btn-primary">Envoyer mon avis</button>
+            <button id="cancel-rating-popup" class="btn btn-secondary">Annuler</button>
+          </div>
+        </div>
+        <div id="rating-login-popup" style="display:none;">
+          <p><em>Vous devez être connecté pour donner votre avis sur le menu.</em></p>
+          <div class="popup-actions">
+            <a href="login.html" class="btn btn-primary">Se connecter</a>
+            <button id="cancel-login-popup" class="btn btn-secondary">Fermer</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <footer>
@@ -162,5 +233,325 @@
     </div>
   </footer>
 
+  <script src="assets/app.js"></script>
+  <script src="member.js"></script>
+  <script>
+    // Charger les informations du chef depuis localStorage
+    function chargerInfoChef() {
+      const chefInfo = JSON.parse(localStorage.getItem('orif_chef_info') || '{}');
+      const chef = {
+        nom: chefInfo.nom || "Monsieur Philippe Etchebest",
+        description: chefInfo.description || "Chef passionné par la cuisine du monde et la valorisation des produits locaux. Présent à l'ORIF depuis 8 ans.",
+        photo: chefInfo.photo || "public/images/Philippe_Etchebest.jpg"
+      };
+      
+      const nomElement = document.getElementById('chef-nom');
+      const photoElement = document.getElementById('chef-photo');
+      const descElement = document.getElementById('chef-description');
+      
+      if (nomElement) nomElement.textContent = chef.nom;
+      if (photoElement) {
+        photoElement.src = chef.photo;
+        photoElement.alt = 'Chef ' + chef.nom;
+      }
+      if (descElement) descElement.textContent = chef.description;
+    }
+
+    // Charger les infos du chef au démarrage
+    document.addEventListener('DOMContentLoaded', () => {
+      chargerInfoChef();
+    });
+
+    // Écouter les changements du localStorage pour mettre à jour automatiquement
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'orif_chef_info') {
+        chargerInfoChef();
+      }
+    });
+  </script>
+  <script src="admin.js"></script>
+  <script>
+    // Gestion du popup d'avis
+    document.addEventListener('DOMContentLoaded', () => {
+      const openPopupBtn = document.getElementById('open-rating-popup');
+      const closePopupBtn = document.getElementById('close-rating-popup');
+      const cancelPopupBtn = document.getElementById('cancel-rating-popup');
+      const cancelLoginBtn = document.getElementById('cancel-login-popup');
+      const submitPopupBtn = document.getElementById('submit-rating-popup');
+      const popupOverlay = document.getElementById('rating-popup');
+      const starsPopup = document.querySelectorAll('#rating-popup .star');
+      const commentPopupField = document.getElementById('comment-popup');
+      let selectedRatingPopup = 0;
+
+      // Initialiser les fonctions de membres
+      initMemberFeatures();
+      
+      // Vérifier si une date spécifique est demandée via URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const dateParam = urlParams.get('date');
+      
+      // Charger le menu du jour depuis le localStorage
+      if (dateParam) {
+        console.log('Date spécifique demandée via URL:', dateParam);
+        chargerMenuDuJour(dateParam);
+        
+        // Mettre à jour le filtre de date aussi
+        const filterInput = document.getElementById('filtre-date');
+        if (filterInput) {
+          filterInput.value = dateParam;
+        }
+      } else {
+        chargerMenuDuJour();
+      }
+
+      // Ouvrir le popup
+      if (openPopupBtn) {
+        openPopupBtn.addEventListener('click', () => {
+          const user = currentUser();
+          const ratingFormPopup = document.getElementById('rating-form-popup');
+          const ratingLoginPopup = document.getElementById('rating-login-popup');
+
+          if (user && user.role === 'member') {
+            ratingFormPopup.style.display = 'block';
+            ratingLoginPopup.style.display = 'none';
+          } else {
+            ratingFormPopup.style.display = 'none';
+            ratingLoginPopup.style.display = 'block';
+          }
+
+          popupOverlay.style.display = 'flex';
+          selectedRatingPopup = 0;
+          commentPopupField.value = '';
+          updateStarsDisplayPopup();
+        });
+      }
+
+      // Fermer le popup
+      function closePopup() {
+        popupOverlay.style.display = 'none';
+        selectedRatingPopup = 0;
+        commentPopupField.value = '';
+        updateStarsDisplayPopup();
+      }
+
+      if (closePopupBtn) closePopupBtn.addEventListener('click', closePopup);
+      if (cancelPopupBtn) cancelPopupBtn.addEventListener('click', closePopup);
+      if (cancelLoginBtn) cancelLoginBtn.addEventListener('click', closePopup);
+
+      // Fermer en cliquant sur l'overlay
+      popupOverlay?.addEventListener('click', (e) => {
+        if (e.target === popupOverlay) {
+          closePopup();
+        }
+      });
+
+      // Événements des étoiles dans le popup
+      starsPopup.forEach((star, index) => {
+        star.addEventListener('click', () => {
+          selectedRatingPopup = index + 1;
+          updateStarsDisplayPopup();
+        });
+
+        star.addEventListener('mouseenter', () => {
+          highlightStarsPopup(index + 1);
+        });
+      });
+
+      document.querySelector('#rating-popup .rating-stars')?.addEventListener('mouseleave', () => {
+        updateStarsDisplayPopup();
+      });
+
+      // Soumission de l'avis depuis le popup
+      if (submitPopupBtn) {
+        submitPopupBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          if (selectedRatingPopup === 0) {
+            alert('Veuillez sélectionner une note avant d\'envoyer votre avis.');
+            return;
+          }
+
+          const comment = commentPopupField.value.trim();
+          if (ajouterAvis(selectedRatingPopup, comment)) {
+            alert('Merci pour votre avis !');
+            closePopup();
+          }
+        });
+      }
+
+      function highlightStarsPopup(rating) {
+        starsPopup.forEach((star, index) => {
+          star.classList.toggle('active', index < rating);
+        });
+      }
+
+      function updateStarsDisplayPopup() {
+        highlightStarsPopup(selectedRatingPopup);
+      }
+
+      // Afficher la moyenne des avis
+      const moyenne = calculerMoyenne();
+      const moyenneElement = document.getElementById('moyenne-avis');
+      if (moyenneElement && moyenne > 0) {
+        moyenneElement.textContent = 'Moyenne du jour: ' + moyenne + '/5 ⭐';
+      }
+
+      // Charger l'historique des menus dans l'agenda
+      setTimeout(() => {
+        loadMenuHistoryInAgenda();
+      }, 100);
+
+      // Réagir aux changements de connexion - pas nécessaire avec popup
+    });
+
+    // Navigation smooth
+    document.querySelectorAll('.nav-item').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetId = link.getAttribute('href').slice(1);
+        const targetSection = document.getElementById(targetId);
+        if (targetSection) {
+          targetSection.scrollIntoView({ behavior: 'smooth' });
+          // Mettre à jour l'état actif
+          document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+          link.classList.add('active');
+        }
+      });
+    });
+
+    // Fonction pour charger l'historique des menus dans l'agenda
+    function loadMenuHistoryInAgenda(filterDate = null) {
+      // Cette fonction existe uniquement si admin.js est chargé
+      if (typeof getMenuHistory === 'function') {
+        const history = getMenuHistory();
+        const historyContainer = document.getElementById('menu-history');
+        
+        if (historyContainer) {
+          historyContainer.innerHTML = '';
+          
+          let filteredHistory = history;
+          
+          // Filtrer par date si une date est sélectionnée
+          if (filterDate) {
+            filteredHistory = history.filter(menu => menu.date === filterDate);
+          }
+          
+          if (filteredHistory.length > 0) {
+            // Afficher les menus filtrés ou les 5 derniers
+            const menusToShow = filterDate ? filteredHistory : filteredHistory.slice(0, 5);
+            
+            menusToShow.forEach(menu => {
+              const dateStr = new Date(menu.date).toLocaleDateString('fr-FR', {
+                day: '2-digit',
+                month: '2-digit'
+              });
+              
+              const menuItem = document.createElement('div');
+              menuItem.className = 'agenda-item menu-history-item';
+              menuItem.innerHTML = '<label><input type="checkbox" />📋 ' + menu.platName + ' - ' + dateStr + '</label>';
+              historyContainer.appendChild(menuItem);
+            });
+          } else if (filterDate) {
+            // Message si aucun menu trouvé pour la date
+            const noMenuMsg = document.createElement('div');
+            noMenuMsg.className = 'agenda-item';
+            noMenuMsg.style.fontStyle = 'italic';
+            noMenuMsg.style.color = '#6c757d';
+            noMenuMsg.textContent = 'Aucun menu pour cette date';
+            historyContainer.appendChild(noMenuMsg);
+          }
+        }
+      }
+    }
+
+    // Gestion du filtre de date avec bouton de recherche
+    const filterDateInput = document.getElementById('filtre-date');
+    const btnChercher = document.getElementById('btn-chercher-menu');
+    const statusDiv = document.getElementById('recherche-status');
+    
+    // Bouton de recherche avec feedback visuel
+    if (btnChercher) {
+      btnChercher.addEventListener('click', () => {
+        const dateSelectionnee = filterDateInput ? filterDateInput.value : '';
+        if (dateSelectionnee) {
+          const dateFormatee = new Date(dateSelectionnee).toLocaleDateString('fr-FR', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+          });
+          
+          console.log('Recherche du menu pour la date:', dateSelectionnee);
+          statusDiv.innerHTML = '🔍 Recherche du menu du ' + dateFormatee + '...';
+          statusDiv.style.color = '#007bff';
+          
+          // Rechercher dans l'historique
+          const history = JSON.parse(localStorage.getItem('orif_menu_history') || '[]');
+          const menuTrouve = history.find(menu => menu.date === dateSelectionnee);
+          
+          setTimeout(() => {
+            if (menuTrouve) {
+              statusDiv.innerHTML = '✅ Menu trouvé pour le ' + dateFormatee + ' !<br><strong>' + menuTrouve.platName + '</strong>';
+              statusDiv.style.color = '#28a745';
+              chargerMenuDuJour(dateSelectionnee);
+              
+              // Scroll vers le haut pour voir le menu
+              document.querySelector('main').scrollIntoView({ behavior: 'smooth' });
+            } else {
+              statusDiv.innerHTML = '❌ Aucun menu enregistré pour le ' + dateFormatee;
+              statusDiv.style.color = '#dc3545';
+              
+              // Revenir au menu par défaut
+              chargerMenuDuJour();
+            }
+          }, 800);
+        } else {
+          statusDiv.innerHTML = '⚠️ Veuillez sélectionner une date';
+          statusDiv.style.color = '#ffc107';
+        }
+      });
+    }
+    
+    // Changement automatique de date
+    if (filterDateInput) {
+      filterDateInput.addEventListener('change', (e) => {
+        const selectedDate = e.target.value;
+        if (statusDiv) {
+          statusDiv.innerHTML = ''; // Effacer le statut
+        }
+        
+        // Mettre à jour l'agenda
+        loadMenuHistoryInAgenda(selectedDate);
+      });
+      
+      // Double-clic pour effacer le filtre
+      filterDateInput.addEventListener('dblclick', () => {
+        filterDateInput.value = '';
+        chargerMenuDuJour();
+        loadMenuHistoryInAgenda();
+        if (statusDiv) statusDiv.innerHTML = '';
+      });
+    }
+
+    // Écouter les changements de localStorage pour mettre à jour l'agenda
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'orif_menu_history') {
+        loadMenuHistoryInAgenda();
+      }
+    });
+
+    // Recharger l'agenda toutes les 2 secondes pour détecter les changements
+    setInterval(() => {
+      loadMenuHistoryInAgenda();
+    }, 2000);
+  </script>
+  
+  <footer style="background: #2c3e50; color: white; text-align: center; padding: 2rem 1rem 1rem; margin-top: 2rem;">
+    <p style="margin: 0 0 1rem 0; color: white;">© 2025 ORIF – Tous droits réservés</p>
+    <div class="footer-links" style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
+      <a href="#" style="color: #bdc3c7; text-decoration: none; font-size: 0.9rem;">Mentions légales</a>
+      <a href="#" style="color: #bdc3c7; text-decoration: none; font-size: 0.9rem;">Conditions d'utilisation</a>
+      <a href="#" style="color: #bdc3c7; text-decoration: none; font-size: 0.9rem;">Politique de confidentialité</a>
+      <a href="#" style="color: #bdc3c7; text-decoration: none; font-size: 0.9rem;">Accessibilité</a>
+    </div>
+  </footer>
 </body>
 </html>

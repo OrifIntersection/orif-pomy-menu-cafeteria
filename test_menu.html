@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Test Menu Enregistré - ORIF-POMY</title>
+  <link rel="stylesheet" href="assets/style.css"/>
+  <link rel="stylesheet" href="assets/responsive.css"/>
+  <link rel="stylesheet" href="three-column-layout.css"/>
+</head>
+<body>
+  <header>
+    <div class="logo-container">
+      <img src="public/images/logo-orif.png" alt="Logo ORIF" class="logo-orif" />
+      <div>
+        <h1>Test Menu Enregistré – ORIF-POMY</h1>
+        <p class="date" id="test-date">ORIF-POMY Cafétéria</p>
+      </div>
+    </div>
+
+    <div class="user-options">
+      <a class="btn" href="index.html">Retour</a>
+    </div>
+  </header>
+
+  <div class="main-layout">
+    <main class="content">
+      <div style="background: #d4edda; border: 1px solid #c3e6cb; color: #155724; padding: 1rem; border-radius: 8px; margin-bottom: 2rem;">
+        <h3>🧪 Test d'affichage du menu enregistré</h3>
+        <p>Voici comment le menu devrait s'afficher après enregistrement.</p>
+      </div>
+      
+      <!-- Date en grand -->
+      <div style="text-align: center; background: linear-gradient(135deg, #2b5a87, #1e3a5f); color: white; padding: 2rem; border-radius: 12px; margin-bottom: 2rem; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+        <h2 style="margin: 0; font-size: 2.5rem; font-weight: bold;">Menu du</h2>
+        <div id="date-display" style="font-size: 3rem; font-weight: bold; margin: 0.5rem 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
+          12 août 2025
+        </div>
+        <p style="margin: 0; font-size: 1.2rem; opacity: 0.9;">Lundi</p>
+      </div>
+
+      <!-- PLAT DU JOUR -->
+      <section id="plat" class="section-card">
+        <h2>Plat du jour</h2>
+        <div class="badges">
+          <span class="badge badge-allergen">🚨 Allergènes: sulfites, lactose</span>
+        </div>
+        <img src="attached_assets/generated_images/Coq_au_vin_dish_34d5050a.png" alt="Coq au Vin"/>
+        <p><strong>Nom :</strong> <span id="plat-nom">Coq au Vin</span></p>
+        <p><strong>Description :</strong> <span id="plat-desc">Poulet fermier mijoté au vin rouge de Bourgogne avec champignons et lardons</span></p>
+      </section>
+
+      <!-- DESSERT -->
+      <section id="dessert" class="section-card">
+        <h2>Dessert du jour</h2>
+        <div class="badges">
+          <span class="badge badge-allergen">🚨 Allergènes: gluten, lactose, oeuf</span>
+        </div>
+        <p id="dessert-content">Tarte Tatin aux pommes</p>
+      </section>
+
+      <!-- SELF -->
+      <section id="self" class="section-card">
+        <h2>Self-service du jour</h2>
+        <ul id="self-list">
+          <li>Bœuf bourguignon</li>
+          <li>Ratatouille provençale</li>
+          <li>Quiche lorraine</li>
+        </ul>
+      </section>
+
+      <!-- SALADES -->
+      <section id="salades" class="section-card">
+        <h2>Bar à salades</h2>
+        <ul id="salades-list">
+          <li>Salade verte aux noix</li>
+          <li>Tomates du jardin</li>
+          <li>Vinaigrette française</li>
+        </ul>
+      </section>
+
+      <!-- VÉGÉ -->
+      <section id="vegetarien" class="section-card">
+        <h2>🌱 Plat végétarien</h2>
+        <div class="badges">
+          <span class="badge badge-veg">🌿 100% Végétarien</span>
+        </div>
+        <p id="veg-content">Ratatouille aux herbes de Provence</p>
+      </section>
+
+      <!-- Test localStorage -->
+      <section class="section-card">
+        <h3>État du localStorage</h3>
+        <div style="background: #f8f9fa; padding: 1rem; border-radius: 6px; font-family: monospace; font-size: 0.9rem;">
+          <strong>orif_menu_data:</strong><br>
+          <span id="menu-data-content">Chargement...</span><br><br>
+          <strong>orif_menu_history:</strong><br>
+          <span id="history-data-content">Chargement...</span>
+        </div>
+        <div style="margin-top: 1rem;">
+          <button onclick="testerEnregistrement()" class="btn">Simuler un enregistrement</button>
+          <button onclick="ajouterMenuTestPour14Aout()" class="btn">Ajouter menu 14/08</button>
+          <button onclick="viderLocalStorage()" class="btn btn-outline">Vider localStorage</button>
+          <button onclick="location.reload()" class="btn btn-outline">Recharger</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <footer>
+    <p>© 2025 ORIF – Tous droits réservés</p>
+  </footer>
+
+  <script src="assets/app.js"></script>
+  <script src="admin.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      afficherEtatLocalStorage();
+      afficherDateActuelle();
+    });
+
+    function afficherDateActuelle() {
+      const aujourd = new Date();
+      const options = { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+      };
+      const dateFormatee = aujourd.toLocaleDateString('fr-FR', options);
+      const jourSeul = aujourd.toLocaleDateString('fr-FR', { weekday: 'long' });
+      const dateSeule = aujourd.toLocaleDateString('fr-FR', { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+      });
+      
+      document.getElementById('date-display').textContent = dateSeule;
+      document.querySelector('#date-display').nextElementSibling.textContent = jourSeul.charAt(0).toUpperCase() + jourSeul.slice(1);
+    }
+
+    function afficherEtatLocalStorage() {
+      const menuData = localStorage.getItem('orif_menu_data');
+      const historyData = localStorage.getItem('orif_menu_history');
+      
+      document.getElementById('menu-data-content').textContent = 
+        menuData ? JSON.stringify(JSON.parse(menuData), null, 2) : 'Aucune donnée';
+      
+      document.getElementById('history-data-content').textContent = 
+        historyData ? JSON.stringify(JSON.parse(historyData), null, 2) : 'Aucune donnée';
+    }
+
+    function testerEnregistrement() {
+      const aujourdhui = new Date().toISOString().slice(0, 10);
+      
+      // Menu avec la date d'aujourd'hui et une nouvelle image
+      const menuTest = {
+        today: {
+          date: aujourdhui,
+          plat: {
+            name: "Coq au Vin",
+            description: "Poulet fermier mijoté au vin rouge de Bourgogne avec champignons et lardons",
+            img: "attached_assets/generated_images/Coq_au_vin_dish_34d5050a.png",
+            veg: false,
+            allergens: ["sulfites", "lactose"]
+          },
+          dessert: {
+            text: "Tarte Tatin aux pommes",
+            allergens: ["gluten", "lactose", "oeuf"]
+          },
+          self: ["Bœuf bourguignon", "Ratatouille provençale", "Quiche lorraine"],
+          saladbar: ["Salade verte aux noix", "Tomates du jardin", "Vinaigrette française"],
+          vegetarien: "Ratatouille aux herbes de Provence",
+          avis: []
+        }
+      };
+
+      const historyTest = [{
+        id: Date.now(),
+        date: aujourdhui,
+        platName: "Coq au Vin",
+        platDesc: "Poulet fermier mijoté au vin rouge de Bourgogne avec champignons et lardons",
+        platImg: menuTest.today.plat.img,
+        platVeg: false,
+        platAllergens: ["sulfites", "lactose"],
+        dessertText: "Tarte Tatin aux pommes",
+        dessertAllergens: ["gluten", "lactose", "oeuf"],
+        selfItems: ["Bœuf bourguignon", "Ratatouille provençale", "Quiche lorraine"],
+        saladItems: ["Salade verte aux noix", "Tomates du jardin", "Vinaigrette française"],
+        vegText: "Ratatouille aux herbes de Provence",
+        timestamp: new Date().toISOString()
+      }];
+
+      localStorage.setItem('orif_menu_data', JSON.stringify(menuTest));
+      localStorage.setItem('orif_menu_history', JSON.stringify(historyTest));
+      
+      alert('Menu test enregistré ! Vérifiez maintenant la page principale.');
+      afficherEtatLocalStorage();
+    }
+
+    function ajouterMenuTestPour14Aout() {
+      // Menu spécifique pour le 14 août pour tester la recherche
+      const menuTest14Aout = {
+        id: Date.now(),
+        date: "2025-08-14",
+        platName: "Ratatouille Niçoise",
+        platDesc: "Légumes de saison mijotés aux herbes de Provence",
+        platImg: "attached_assets/generated_images/Coq_au_vin_dish_34d5050a.png",
+        platVeg: true,
+        platAllergens: ["sans allergènes"],
+        dessertText: "Crème brûlée à la lavande",
+        dessertAllergens: ["lactose", "oeuf"],
+        selfItems: ["Gratin dauphinois", "Salade niçoise", "Potage de légumes"],
+        saladItems: ["Roquette", "Tomates confites", "Huile d'olive"],
+        vegText: "Couscous aux légumes d'été",
+        timestamp: new Date("2025-08-14").toISOString()
+      };
+
+      const history = JSON.parse(localStorage.getItem('orif_menu_history') || '[]');
+      
+      // Vérifier si le menu existe déjà
+      const existingIndex = history.findIndex(menu => menu.date === "2025-08-14");
+      if (existingIndex >= 0) {
+        history[existingIndex] = menuTest14Aout;
+      } else {
+        history.push(menuTest14Aout);
+      }
+      
+      localStorage.setItem('orif_menu_history', JSON.stringify(history));
+      alert('Menu du 14 août 2025 ajouté ! Maintenant va sur la page principale et teste la recherche avec cette date.');
+      afficherEtatLocalStorage();
+    }
+
+    function viderLocalStorage() {
+      localStorage.removeItem('orif_menu_data');
+      localStorage.removeItem('orif_menu_history');
+      alert('localStorage vidé !');
+      afficherEtatLocalStorage();
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Enregistré - ORIF Pomy</title>
+    <link rel="stylesheet" href="assets/style.css?nocache=1755091600"/>
+    <style>
+        .confirmation-container {
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .success-icon {
+            font-size: 4rem;
+            color: #28a745;
+            margin-bottom: 1rem;
+        }
+        .menu-details {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            text-align: left;
+        }
+        .detail-row {
+            display: flex;
+            margin: 0.5rem 0;
+        }
+        .detail-label {
+            font-weight: bold;
+            width: 150px;
+            color: #333;
+        }
+        .detail-value {
+            flex: 1;
+            color: #666;
+        }
+        .actions {
+            margin-top: 2rem;
+        }
+        .btn {
+            padding: 12px 24px;
+            margin: 0 0.5rem;
+            border: none;
+            border-radius: 6px;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+        .btn:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="public/images/logo-orif.png" alt="Logo ORIF" class="logo">
+            <h1>Menu ORIF – Pomy</h1>
+        </div>
+        <div id="account-area"></div>
+    </header>
+
+    <div class="confirmation-container">
+        <div class="success-icon">✅</div>
+        <h2>Menu Enregistré avec Succès !</h2>
+        <p>Le menu a été créé et enregistré dans le système. Il est maintenant disponible pour les bénéficiaires.</p>
+        
+        <div class="menu-details" id="menu-details">
+            <!-- Les détails du menu seront chargés ici -->
+        </div>
+        
+        <div class="actions">
+            <a href="index.html" class="btn btn-primary">Voir le Menu Public</a>
+            <a href="admin.html" class="btn btn-secondary">Créer un Autre Menu</a>
+            <a href="archive.html" class="btn btn-secondary">Voir l'Historique</a>
+        </div>
+    </div>
+
+    <script src="assets/app.js"></script>
+    <script src="admin.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Rendu de la zone compte
+            renderAccountArea();
+            
+            // Charger les détails du menu depuis les paramètres URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const menuDate = urlParams.get('date');
+            const platName = urlParams.get('plat');
+            
+            if (menuDate && platName) {
+                afficherDetailsMenu(menuDate, platName);
+            } else {
+                // Essayer de récupérer le dernier menu créé
+                afficherDernierMenu();
+            }
+        });
+
+        function afficherDetailsMenu(date, platName) {
+            const detailsDiv = document.getElementById('menu-details');
+            
+            try {
+                // Récupérer les données du menu
+                const menuData = JSON.parse(localStorage.getItem('orif_menu_data') || '{}');
+                const history = JSON.parse(localStorage.getItem('orif_menu_history') || '[]');
+                
+                // Chercher dans l'historique
+                const menuItem = history.find(item => item.date === date);
+                
+                if (menuItem) {
+                    const formatDate = new Date(date).toLocaleDateString('fr-FR', { 
+                        weekday: 'long', 
+                        year: 'numeric', 
+                        month: 'long', 
+                        day: 'numeric' 
+                    });
+                    
+                    detailsDiv.innerHTML = `
+                        <div class="detail-row">
+                            <span class="detail-label">Date :</span>
+                            <span class="detail-value">${formatDate}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Plat Principal :</span>
+                            <span class="detail-value">${menuItem.platName}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Description :</span>
+                            <span class="detail-value">${menuItem.platDesc || 'Aucune description'}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Dessert :</span>
+                            <span class="detail-value">${menuItem.dessertText || 'Non spécifié'}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Végétarien :</span>
+                            <span class="detail-value">${menuItem.vegText || 'Non spécifié'}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Self-Service :</span>
+                            <span class="detail-value">${menuItem.selfItems ? menuItem.selfItems.map(item => item.name).join(', ') : 'Aucun'}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Salades :</span>
+                            <span class="detail-value">${menuItem.saladItems ? menuItem.saladItems.map(item => item.name).join(', ') : 'Aucune'}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Créé le :</span>
+                            <span class="detail-value">${new Date(menuItem.timestamp).toLocaleString('fr-FR')}</span>
+                        </div>
+                    `;
+                } else {
+                    detailsDiv.innerHTML = `
+                        <p style="color: #dc3545;">Impossible de récupérer les détails du menu.</p>
+                    `;
+                }
+            } catch (e) {
+                console.error('Erreur lors du chargement des détails:', e);
+                detailsDiv.innerHTML = `
+                    <p style="color: #dc3545;">Erreur lors du chargement des détails du menu.</p>
+                `;
+            }
+        }
+
+        function afficherDernierMenu() {
+            try {
+                const history = JSON.parse(localStorage.getItem('orif_menu_history') || '[]');
+                if (history.length > 0) {
+                    const dernierMenu = history[0]; // Le plus récent
+                    afficherDetailsMenu(dernierMenu.date, dernierMenu.platName);
+                } else {
+                    document.getElementById('menu-details').innerHTML = `
+                        <p style="color: #dc3545;">Aucun menu trouvé dans l'historique.</p>
+                    `;
+                }
+            } catch (e) {
+                console.error('Erreur:', e);
+            }
+        }
+    </script>
+    
+    <footer style="background: #2c3e50; color: white; text-align: center; padding: 2rem 1rem 1rem; margin-top: 2rem;">
+        <p style="margin: 0 0 1rem 0; color: white;">© 2025 ORIF – Tous droits réservés</p>
+        <div class="footer-links" style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
+            <a href="#" style="color: #bdc3c7; text-decoration: none; font-size: 0.9rem;">Mentions légales</a>
+            <a href="#" style="color: #bdc3c7; text-decoration: none; font-size: 0.9rem;">Conditions d'utilisation</a>
+            <a href="#" style="color: #bdc3c7; text-decoration: none; font-size: 0.9rem;">Politique de confidentialité</a>
+            <a href="#" style="color: #bdc3c7; text-decoration: none; font-size: 0.9rem;">Accessibilité</a>
+        </div>
+    </footer>
+</body>
+</html>
