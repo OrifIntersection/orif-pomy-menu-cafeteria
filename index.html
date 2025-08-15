@@ -6,22 +6,19 @@
   <title>Menu ORIF - Menu du jour</title>
   <link rel="stylesheet" href="./assets/style.css"/>
   <link rel="stylesheet" href="./assets/responsive.css"/>
-  <link rel="stylesheet" href="./three-column-layout.css"/>
-  <link rel="stylesheet" href="./fixes.css"/>
 </head>
 <body>
   <header>
     <div class="logo-container">
       <img src="./public/images/logo-orif.png" alt="Logo ORIF" class="logo-orif" />
       <div>
-        <h1>Menu du jour – ORIF-POMY</h1>
-        <p class="date" id="date-actuelle">Mercredi 14 août 2025</p>
+        <h1>Cafeteria ORIF-POMY</h1>
       </div>
     </div>
 
     <div class="user-options">
       <div id="account-area">
-        <a class="btn" href="./login.html">Se connecter</a>
+        <a class="btn" href="login.html">Se connecter</a>
       </div>
       <select name="langue" id="langue">
         <option value="fr">FR</option>
@@ -51,9 +48,13 @@
 
       <!-- PLAT DU JOUR -->
       <section id="plat" class="section-card">
-        <h2>Plat du jour</h2>
+        <div>
+            <h2>Plat du jour</h2>
+            <p class="date" id="date-actuelle">Mercredi 14 août 2025</p>
+        </div>
+
         <div class="badges" id="plat-badges"></div>
-        <img id="plat-img" src="public/images/plat_jour.jpg" alt="Plat du jour"/>
+        <img id="plat-img" src="./public/images/plat_jour.jpg" alt="Plat du jour"/>
         <p><strong>Nom :</strong> <span id="plat-nom">Poulet au curry</span></p>
         <p><strong>Description :</strong> <span id="plat-desc">Riz basmati, légumes vapeur</span></p>
         
@@ -63,9 +64,9 @@
             <h3>Avis sur le menu d'aujourd'hui</h3>
             <button id="open-rating-popup" class="btn btn-rating">Donner mon avis</button>
           </div>
-          <div id="moyenne-avis" style="display:none;">Moyenne : <span id="moyenne-note">0</span>/5</div>
+          <div id="moyenne-avis" class="moyenne-avis">Moyenne : <span id="moyenne-note">0</span>/5</div>
           <ul id="avis-list">
-            <li style="color:#666;font-style:italic;">Aucun avis pour aujourd'hui</li>
+            <li class="aucun-avis">Aucun avis pour aujourd'hui</li>
           </ul>
         </div>
       </section>
@@ -135,8 +136,8 @@
         <div class="agenda">
           <label for="filtre-date">Filtrer par date :</label>
           <input type="date" id="filtre-date" />
-          <button id="btn-chercher-menu" class="btn-mini" style="margin: 0.5rem 0;">Chercher menu</button>
-          <div id="recherche-status" style="margin-top: 0.5rem; font-size: 0.9rem; color: #666;"></div>
+          <button id="btn-chercher-menu" class="btn-mini btn-chercher-menu">Chercher menu</button>
+          <div id="recherche-status" class="recherche-status"></div>
         </div>
         <div id="menu-history">
           <!-- Les menus enregistrés apparaîtront ici -->
@@ -158,20 +159,20 @@
       <!-- CHEF déplacé dans la colonne de droite -->
       <div class="section">
         <h3>👨‍🍳 Chef du jour</h3>
-        <img id="chef-photo-sidebar" src="public/images/Philippe_Etchebest.jpg" alt="Chef" style="width:60px;height:60px;border-radius:50%;object-fit:cover;float:left;margin:0 0.5rem 0.5rem 0;"/>
-        <p style="font-size:0.9rem;margin-bottom:0.3rem;"><strong id="chef-nom-sidebar">Philippe Etchebest</strong></p>
-        <p id="chef-description-sidebar" style="font-size:0.8rem;color:#666;clear:both;line-height:1.3;">Chef passionné par la cuisine du monde et la valorisation des produits locaux.</p>
-        <div id="chef-admin-controls" style="margin-top: 0.5rem; display: none;">
-          <a href="chef-management.html" class="btn-mini" style="font-size:0.75rem;padding:0.3rem 0.6rem;">✏️ Modifier</a>
+        <img id="chef-photo-sidebar" src="./public/images/Philippe_Etchebest.jpg" alt="Chef" class="chef-photo-sidebar"/>
+        <p class="chef-nom"><strong id="chef-nom-sidebar">Philippe Etchebest</strong></p>
+        <p id="chef-description-sidebar" class="chef-description">Chef passionné par la cuisine du monde et la valorisation des produits locaux.</p>
+        <div id="chef-admin-controls" class="chef-admin-controls">
+          <a href="chef-management.html" class="btn-mini chef-edit-btn">✏️ Modifier</a>
         </div>
       </div>
 
       <!-- HORAIRES déplacés dans la colonne de droite -->
       <div class="section">
         <h3>🕐 Horaires</h3>
-        <ul style="list-style:none;padding:0;font-size:0.85rem;margin:0;">
-          <li style="margin:0.3rem 0;color:#555;"><strong>Petit déjeuner :</strong> 07h05 – 07h45</li>
-          <li style="margin:0.3rem 0;color:#555;"><strong>Cafétéria :</strong> 12h00 – 12h45</li>
+        <ul class="horaires-list">
+          <li><strong>Petit déjeuner :</strong> 07h05 – 07h45</li>
+          <li><strong>Cafétéria :</strong> 12h00 – 12h45</li>
         </ul>
       </div>
 
@@ -233,8 +234,8 @@
     </div>
   </footer>
 
-  <script src="assets/app.js"></script>
-  <script src="member.js"></script>
+  <script src="./assets/app.js"></script>
+  <script src="./member.js"></script>
   <script>
     // Charger les informations du chef depuis localStorage
     function chargerInfoChef() {
@@ -242,7 +243,7 @@
       const chef = {
         nom: chefInfo.nom || "Monsieur Philippe Etchebest",
         description: chefInfo.description || "Chef passionné par la cuisine du monde et la valorisation des produits locaux. Présent à l'ORIF depuis 8 ans.",
-        photo: chefInfo.photo || "public/images/Philippe_Etchebest.jpg"
+        photo: chefInfo.photo || "./public/images/Philippe_Etchebest.jpg"
       };
       
       const nomElement = document.getElementById('chef-nom');

@@ -4,14 +4,13 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Gestion Chef - ORIF-POMY</title>
-  <link rel="stylesheet" href="assets/style.css"/>
-  <link rel="stylesheet" href="assets/responsive.css"/>
-  <link rel="stylesheet" href="three-column-layout.css"/>
+  <link rel="stylesheet" href="./assets/style.css"/>
+  <link rel="stylesheet" href="./assets/responsive.css"/>
 </head>
 <body>
   <header>
     <div class="logo-container">
-      <img src="public/images/logo-orif.png" alt="Logo ORIF" class="logo-orif" />
+      <img src="./public/images/logo-orif.png" alt="Logo ORIF" class="logo-orif" />
       <div>
         <h1>Gestion du Chef – ORIF-POMY</h1>
         <p class="date">Configuration</p>
@@ -24,6 +23,12 @@
     </div>
   </header>
 
+  <div class="header-nav">
+    <div class="nav-container">
+      <a href="#" class="nav-item active">Gestion Chef</a>
+    </div>
+  </div>
+
   <div class="main-layout">
     <main class="content">
       <div style="background: #e3f2fd; border: 1px solid #2196f3; color: #0d47a1; padding: 1rem; border-radius: 8px; margin-bottom: 2rem;">
@@ -35,7 +40,7 @@
       <section class="section-card">
         <h2>Informations actuelles du chef</h2>
         <div id="chef-actuel" style="border: 1px solid #ddd; padding: 1rem; border-radius: 6px; margin-bottom: 1rem;">
-          <img id="chef-photo-actuelle" src="public/images/Philippe_Etchebest.jpg" alt="Chef actuel" style="width: 150px; height: 150px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem;"/>
+          <img id="chef-photo-actuelle" src="./public/images/Philippe_Etchebest.jpg" alt="Chef actuel" style="width: 150px; height: 150px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem;"/>
           <p><strong>Nom:</strong> <span id="chef-nom-actuel">Monsieur Philippe Etchebest</span></p>
           <p><strong>Description:</strong> <span id="chef-desc-actuelle">Chef passionné par la cuisine du monde et la valorisation des produits locaux. Présent à l'ORIF depuis 8 ans.</span></p>
         </div>

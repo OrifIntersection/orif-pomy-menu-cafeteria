@@ -223,18 +223,116 @@ function initAdminPage() {
       
       console.log('Affichage du message de confirmation');
       
-      // Afficher le message de confirmation simple
-      alert(confirmationMessage);
-      
-      // Demander ce que l'utilisateur veut faire
-      if (confirm('Voulez-vous voir le résultat sur la page principale ?')) {
-        window.location.href = 'index.html';
-      }
+      // Afficher une popup de confirmation stylée
+      showConfirmationPopup(confirmationMessage, () => {
+        // Demander si l'utilisateur veut voir la page principale
+        if (confirm('Voulez-vous voir le résultat sur la page principale ?')) {
+          window.location.href = 'index.html';
+        }
+      });
+      // Actualiser l'affichage du menu
+      updateMenuStatus();
+      resetForm();
     } catch (error) {
       console.error('Erreur lors de l\u0027enregistrement:', error);
-      alert('Erreur lors de l\u0027enregistrement du menu: ' + error.message);
+      alert('❌ Erreur lors de l\u0027enregistrement du menu. Veuillez réessayer.');
     }
   });
+}
+
+// Popup de confirmation stylée
+function showConfirmationPopup(message, callback) {
+  // Créer l'overlay
+  const overlay = document.createElement('div');
+  overlay.style.cssText = `
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0; 
+    background: rgba(0,0,0,0.7); z-index: 10000; display: flex; 
+    justify-content: center; align-items: center;
+  `;
+  
+  // Créer la popup
+  const popup = document.createElement('div');
+  popup.style.cssText = `
+    background: #424549; border-radius: 12px; padding: 2rem; 
+    max-width: 500px; margin: 1rem; color: white; text-align: center; 
+    box-shadow: 0 4px 25px rgba(0,0,0,0.5);
+  `;
+  
+  popup.innerHTML = `
+    <div style="font-size: 3rem; margin-bottom: 1rem;">✅</div>
+    <h3 style="margin: 0 0 1rem 0; color: #4CAF50;">Menu enregistré avec succès !</h3>
+    <p style="line-height: 1.6; margin-bottom: 2rem;">${message.replace(/\n/g, '<br>')}</p>
+    <button onclick="this.closest('.overlay').remove(); if(window.confirmCallback) window.confirmCallback();" style="
+      background: #7289da; color: white; border: none; padding: 0.8rem 2rem; 
+      border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;
+    ">Fermer</button>
+  `;
+  
+  overlay.className = 'overlay';
+  overlay.appendChild(popup);
+  document.body.appendChild(overlay);
+  
+  // Stocker le callback
+  window.confirmCallback = callback;
+  
+  // Fermer avec Escape
+  const handleEscape = (e) => {
+    if (e.key === 'Escape') {
+      overlay.remove();
+      if (callback) callback();
+      window.confirmCallback = null;
+      document.removeEventListener('keydown', handleEscape);
+    }
+  };
+  document.addEventListener('keydown', handleEscape);
+}
+
+function updateMenuStatus() {
+  const today = formatTodaysDate();
+  const menuData = getMenuData();
+  
+  const dateDisplay = document.getElementById('date-display');
+  const menuStatus = document.getElementById('menu-status');
+  
+  if (dateDisplay) {
+    dateDisplay.textContent = new Date().toLocaleDateString('fr-FR', { 
+      weekday: 'long', 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    });
+  }
+  
+  if (menuStatus) {
+    if (menuData.today && menuData.today.date === today) {
+      menuStatus.textContent = `📅 Menu publié pour aujourd'hui : ${menuData.today.plat.name}`;
+      menuStatus.style.color = '#4CAF50';
+    } else {
+      menuStatus.textContent = '📝 Aucun menu publié pour aujourd\'hui';
+      menuStatus.style.color = '#FFA726';
+    }
+  }
+}
+
+function resetForm() {
+  const form = document.getElementById('menu-form');
+  if (form) {
+    form.reset();
+    
+    // Remettre la date à aujourd'hui
+    const dateInput = document.getElementById('date');
+    if (dateInput) {
+      dateInput.value = formatTodaysDate();
+    }
+    
+    // Vider l'aperçu image
+    const imgPreview = document.getElementById('imgPreview');
+    if (imgPreview) {
+      imgPreview.style.display = 'none';
+    }
+    
+    imgDataURL = null;
+  }
 }
 
 // Charger le menu existant pour modification

@@ -3,14 +3,13 @@
 <head>
   <meta charset="utf-8" />
   <title>Archive ORIF</title>
-  <link rel="stylesheet" href="assets/style.css?nocache=1755091600">
-  <link rel="stylesheet" href="assets/responsive.css?nocache=1755091600">
-  <link rel="stylesheet" href="fixes.css">
+  <link rel="stylesheet" href="./assets/style.css">
+  <link rel="stylesheet" href="./assets/responsive.css">
 </head>
 <body>
   <header>
     <div class="logo-container">
-      <img src="public/images/logo-orif.png" alt="Logo ORIF" class="logo-orif" />
+      <img src="./public/images/logo-orif.png" alt="Logo ORIF" class="logo-orif" />
       <div>
         <h1>Archive des plats</h1>
       </div>
@@ -21,7 +20,13 @@
     </div>
   </header>
 
-  <main class="content archive-container" style="max-width:1200px;margin:2rem auto;">
+  <div class="header-nav">
+    <div class="nav-container">
+      <a href="#" class="nav-item active">Archive</a>
+    </div>
+  </div>
+
+  <main class="content archive-container">
     <div class="section-card">
       <h2>Historique</h2>
       <div id="archive"></div>
@@ -40,9 +45,9 @@
   </footer>
 
 
-  <script src="assets/app.js"></script>
-  <script src="admin.js"></script>
-  <script src="member.js"></script>
+  <script src="./assets/app.js"></script>
+  <script src="./admin.js"></script>
+  <script src="./member.js"></script>
   <script>
     function moyenne(avis = []) {
       if (!avis.length) return 0;

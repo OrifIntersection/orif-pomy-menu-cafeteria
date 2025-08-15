@@ -1,5 +1,13 @@
 {
-  "version": 2,
-  "cleanUrls": true,
-  "trailingSlash": false
+  "functions": {
+    "assets/**": {
+      "includeFiles": "assets/**"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/index.html"
+    }
+  ]
 }
