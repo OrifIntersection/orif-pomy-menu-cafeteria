@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <title>Archive ORIF</title>
+  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./responsive.css">
+</head>
+<body>
+  <header>
+    <div class="logo-container">
+      <img src="./logo-orif.png" alt="Logo ORIF" class="logo-orif" />
+      <div>
+        <h1>Archive des plats</h1>
+      </div>
+    </div>
+    <div class="user-options">
+      <a href="./index.html" class="btn">🏠 Page d'accueil</a>
+      <div id="account-area"></div>
+    </div>
+  </header>
+
+  <div class="header-nav">
+    <div class="nav-container">
+      <a href="#" class="nav-item active">Archive</a>
+    </div>
+  </div>
+
+  <main class="content archive-container">
+    <div class="section-card">
+      <h2>Historique</h2>
+      <div id="archive"></div>
+      <div id="historique-container"></div>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2025 ORIF – Tous droits réservés</p>
+    <div class="footer-links">
+      <a href="#">Mentions légales</a>
+      <a href="#">Conditions d'utilisation</a>
+      <a href="#">Politique de confidentialité</a>
+      <a href="#">Accessibilité</a>
+    </div>
+  </footer>
+
+
+  <script src="./app.js"></script>
+  <script src="./admin.js"></script>
+  <script src="./member.js"></script>
+  <script>
+    function moyenne(avis = []) {
+      if (!avis.length) return 0;
+      return (avis.reduce((s, a) => s + (a.note || 0), 0) / avis.length).toFixed(1);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderAccountArea();
+      const user = currentUser();
+      const cont = document.getElementById('archive');
+      
+      if (!user) {
+        cont.innerHTML = '<p>Veuillez vous connecter pour voir l\u0027historique.</p>';
+        return;
+      }
+
+      if (user.role === 'admin') {
+        // Affichage pour admin : historique des menus
+        document.querySelector('h2').textContent = "Historique de tous les menus";
+        afficherHistoriqueMenus(cont);
+      } else if (user.role === 'member') {
+        // Affichage pour membre : ses propres avis
+        document.querySelector('h2').textContent = "Historique de vos avis des menus";
+        afficherHistoriqueAvis(cont);
+        // Ne pas cacher le container pour les membres, on l'utilise pour afficher les avis
+      }
+    });
+
+    function afficherHistoriqueMenus(container) {
+      const history = JSON.parse(localStorage.getItem('orif_menu_history') || '[]');
+      
+      if (history.length === 0) {
+        container.innerHTML = '<p>Aucun menu enregistré.</p>';
+        return;
+      }
+
+      const today = new Date().toISOString().slice(0, 10);
+      
+      let html = '<div class="admin-history">';
+      html += '<h3>📋 Menus enregistrés (passés et futurs)</h3>';
+      
+      history.forEach(menu => {
+        const isFuture = menu.date > today;
+        const isPast = menu.date < today;
+        const isToday = menu.date === today;
+        
+        let statusBadge = '';
+        if (isFuture) statusBadge = '<span class="badge badge-future">À venir</span>';
+        else if (isToday) statusBadge = '<span class="badge badge-today">Aujourd\u0027hui</span>';
+        else statusBadge = '<span class="badge badge-past">Passé</span>';
+        
+        const formatDate = new Date(menu.date).toLocaleDateString('fr-FR', {
+          weekday: 'long',
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric'
+        });
+        
+        html += '<div class="menu-history-card">' +
+          '<div class="menu-header">' +
+            '<h4>' + menu.platName + '</h4>' +
+            statusBadge +
+          '</div>' +
+          '<p class="menu-date">' + formatDate + '</p>' +
+          '<p class="menu-desc">' + (menu.platDesc || 'Pas de description') + '</p>' +
+          '<div class="menu-actions">' +
+            '<button class="btn-mini" onclick="voirMenu(\'' + menu.date + '\')">👁️ Voir</button>' +
+            '<button class="btn-mini btn-edit-avis" onclick="modifierMenuDate(\'' + menu.date + '\')">✏️ Modifier</button>' +
+            '<button class="btn-mini btn-delete-avis" onclick="supprimerMenuDate(\'' + menu.date + '\')">🗑️ Supprimer</button>' +
+          '</div>' +
+        '</div>';
+      });
+      
+      html += '</div>';
+      container.innerHTML = html;
+    }
+
+    function afficherHistoriqueAvis(container, user) {
+      const reviews = JSON.parse(localStorage.getItem('orif_reviews') || '[]');
+      const mesAvis = reviews.filter(avis => avis.userEmail === user.email);
+      
+      if (mesAvis.length === 0) {
+        container.innerHTML = '<p>Vous n\'avez pas encore donné d\'avis.</p>';
+        return;
+      }
+
+      // Grouper mes avis par date
+      const avisParDate = {};
+      mesAvis.forEach(avis => {
+        if (!avisParDate[avis.date]) {
+          avisParDate[avis.date] = [];
+        }
+        avisParDate[avis.date].push(avis);
+      });
+      
+      let html = '<div class="member-history">';
+      html += '<h3>⭐ Mes avis sur les menus</h3>';
+      
+      Object.keys(avisParDate)
+        .sort((a, b) => b.localeCompare(a))
+        .forEach(date => {
+          const avis = avisParDate[date][0]; // Un seul avis par membre par jour
+          const formatDate = new Date(date).toLocaleDateString('fr-FR', {
+            weekday: 'long',
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+          });
+          
+          const etoiles = '★'.repeat(avis.note) + '☆'.repeat(5 - avis.note);
+          
+          html += '<div class="avis-history-card">' +
+            '<div class="avis-header">' +
+              '<h4>' + formatDate + '</h4>' +
+              '<span class="avis-rating">' + etoiles + ' (' + avis.note + '/5)</span>' +
+            '</div>' +
+            '<p class="avis-comment">"' + avis.comment + '"</p>' +
+            '<div class="avis-actions">' +
+              '<button class="btn-mini btn-edit-avis" onclick="modifierAvis(' + avis.id + ')">✏️ Modifier</button>' +
+              '<button class="btn-mini btn-delete-avis" onclick="supprimerAvis(' + avis.id + ')">🗑️ Supprimer</button>' +
+            '</div>' +
+          '</div>';
+        });
+      
+      html += '</div>';
+      container.innerHTML = html;
+    }
+
+    // Fonctions pour admin
+    function voirMenu(date) {
+      // Rediriger vers la page principale avec cette date
+      window.location.href = 'index.html?date=' + date;
+    }
+
+    function modifierMenuDate(date) {
+      // Rediriger vers admin avec cette date pour modification
+      window.location.href = 'admin.html?date=' + date;
+    }
+
+    function supprimerMenuDate(date) {
+      if (confirm('Êtes-vous sûr de vouloir supprimer ce menu ?')) {
+        let history = JSON.parse(localStorage.getItem('orif_menu_history') || '[]');
+        history = history.filter(menu => menu.date !== date);
+        localStorage.setItem('orif_menu_history', JSON.stringify(history));
+        
+        // Supprimer aussi du menu actuel si c'est celui-ci
+        const menuData = JSON.parse(localStorage.getItem('orif_menu_data') || '{}');
+        if (menuData.today && menuData.today.date === date) {
+          localStorage.removeItem('orif_menu_data');
+        }
+        
+        alert('Menu supprimé avec succès.');
+        location.reload();
+      }
+    }
+  </script>
+
+
+</body>
+</html>

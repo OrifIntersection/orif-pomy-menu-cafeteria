@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <title>Test Authentification</title>
+  <style>
+    body { background: #1a1a1a; color: white; font-family: monospace; padding: 20px; }
+    .test-box { background: #2a2a2a; padding: 20px; margin: 10px 0; border-radius: 8px; }
+    button { background: #2b5a87; color: white; border: none; padding: 10px 20px; margin: 5px; border-radius: 4px; cursor: pointer; }
+    .success { color: #4ade80; }
+    .error { color: #f87171; }
+    .warning { color: #fbbf24; }
+  </style>
+</head>
+<body>
+  <h1>🔐 TEST AUTHENTIFICATION ORIF</h1>
+  
+  <div class="test-box">
+    <h2>État Actuel</h2>
+    <div id="current-state"></div>
+  </div>
+
+  <div class="test-box">
+    <h2>Tests Login</h2>
+    <button onclick="testLoginMember()">Test Login Membre</button>
+    <button onclick="testLoginAdmin()">Test Login Admin</button>
+    <button onclick="testLogout()">Test Logout</button>
+    <button onclick="testRenderAccount()">Test Render Account</button>
+  </div>
+
+  <div class="test-box">
+    <h2>Résultats</h2>
+    <div id="results"></div>
+  </div>
+
+  <script src="./app.js"></script>
+  <script>
+    function log(message, type = 'info') {
+      const results = document.getElementById('results');
+      const div = document.createElement('div');
+      div.className = type;
+      div.textContent = `${new Date().toLocaleTimeString()} - ${message}`;
+      results.appendChild(div);
+      console.log(`[${type.toUpperCase()}] ${message}`);
+    }
+
+    function updateCurrentState() {
+      const currentState = document.getElementById('current-state');
+      const user = currentUser();
+      if (user) {
+        currentState.innerHTML = `
+          <span class="success">✅ Utilisateur connecté:</span><br>
+          - Nom: ${user.name}<br>
+          - Email: ${user.email}<br>
+          - Rôle: ${user.role}
+        `;
+      } else {
+        currentState.innerHTML = '<span class="warning">⚠️ Aucun utilisateur connecté</span>';
+      }
+    }
+
+    function testLoginMember() {
+      log('Test login membre avec ayesh.benef@orif.ch / 0000');
+      try {
+        const result = login('ayesh.benef@orif.ch', '0000');
+        if (result) {
+          log(`✅ Login membre réussi: ${result.name} (${result.role})`, 'success');
+        } else {
+          log('❌ Login membre échoué', 'error');
+        }
+      } catch (e) {
+        log(`❌ Erreur login membre: ${e.message}`, 'error');
+      }
+      updateCurrentState();
+    }
+
+    function testLoginAdmin() {
+      log('Test login admin avec ayesh.admin@orif.ch / 0000');
+      try {
+        const result = login('ayesh.admin@orif.ch', '0000');
+        if (result) {
+          log(`✅ Login admin réussi: ${result.name} (${result.role})`, 'success');
+        } else {
+          log('❌ Login admin échoué', 'error');
+        }
+      } catch (e) {
+        log(`❌ Erreur login admin: ${e.message}`, 'error');
+      }
+      updateCurrentState();
+    }
+
+    function testLogout() {
+      log('Test logout');
+      try {
+        logout();
+        log('✅ Logout réussi', 'success');
+      } catch (e) {
+        log(`❌ Erreur logout: ${e.message}`, 'error');
+      }
+      updateCurrentState();
+    }
+
+    function testRenderAccount() {
+      log('Test renderAccountArea()');
+      try {
+        renderAccountArea();
+        log('✅ renderAccountArea() exécuté', 'success');
+      } catch (e) {
+        log(`❌ Erreur renderAccountArea: ${e.message}`, 'error');
+      }
+      updateCurrentState();
+    }
+
+    // Initialiser l'état au chargement
+    document.addEventListener('DOMContentLoaded', () => {
+      updateCurrentState();
+      log('Page de test d\'authentification chargée');
+      
+      // Tester la présence des fonctions
+      if (typeof login === 'function') {
+        log('✅ Fonction login() disponible', 'success');
+      } else {
+        log('❌ Fonction login() manquante', 'error');
+      }
+      
+      if (typeof currentUser === 'function') {
+        log('✅ Fonction currentUser() disponible', 'success');
+      } else {
+        log('❌ Fonction currentUser() manquante', 'error');
+      }
+      
+      if (typeof renderAccountArea === 'function') {
+        log('✅ Fonction renderAccountArea() disponible', 'success');
+      } else {
+        log('❌ Fonction renderAccountArea() manquante', 'error');
+      }
+    });
+  </script>
+</body>
+</html>

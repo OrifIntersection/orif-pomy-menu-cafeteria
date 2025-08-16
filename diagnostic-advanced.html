@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diagnostic Avancé - ORIF</title>
+  <link rel="stylesheet" href="./style.css">
+  <style>
+    .diagnostic-container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: #424549;
+      color: white;
+      border-radius: 8px;
+    }
+    
+    .diagnostic-controls {
+      display: flex;
+      gap: 1rem;
+      margin: 2rem 0;
+      flex-wrap: wrap;
+    }
+    
+    .test-status {
+      background: #36393f;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin: 1rem 0;
+    }
+    
+    .live-status {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .status-item {
+      background: #2f3136;
+      padding: 1rem;
+      border-radius: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .status-label {
+      font-weight: bold;
+      color: #b9bbbe;
+    }
+    
+    .status-value {
+      font-family: monospace;
+      font-size: 0.9rem;
+    }
+    
+    .logs-area {
+      background: #2f3136;
+      border: 1px solid #40444b;
+      border-radius: 4px;
+      padding: 1rem;
+      min-height: 400px;
+      max-height: 600px;
+      overflow-y: auto;
+      font-family: 'Courier New', monospace;
+      font-size: 0.85rem;
+      line-height: 1.4;
+      white-space: pre-wrap;
+    }
+    
+    .test-section {
+      background: #36393f;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin: 1rem 0;
+    }
+    
+    .test-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .test-card {
+      background: #2f3136;
+      padding: 1rem;
+      border-radius: 4px;
+      border-left: 4px solid #7289da;
+    }
+    
+    .test-result {
+      margin-top: 0.5rem;
+      padding: 0.5rem;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 0.8rem;
+    }
+    
+    .test-success { background: #3ba55c; color: white; }
+    .test-error { background: #ed4245; color: white; }
+    .test-warning { background: #faa61a; color: white; }
+    .test-info { background: #5865f2; color: white; }
+    
+    .btn {
+      background: #5865f2;
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background 0.2s;
+    }
+    
+    .btn:hover {
+      background: #4752c4;
+    }
+    
+    .btn.danger {
+      background: #ed4245;
+    }
+    
+    .btn.danger:hover {
+      background: #c73741;
+    }
+    
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: #40444b;
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 1rem 0;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #5865f2, #7289da);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+  </style>
+</head>
+<body>
+  <div class="diagnostic-container">
+    <h1>🔧 Diagnostic Avancé du Système ORIF</h1>
+    <p>Diagnostic complet avec tests automatiques des interactions utilisateur et vérification des résultats attendus.</p>
+    
+    <div class="diagnostic-controls">
+      <button id="run-full-diagnostic" class="btn">🔍 Diagnostic Complet</button>
+      <button id="test-popup-interaction" class="btn">🧪 Test Popup Interactif</button>
+      <button id="test-all-buttons" class="btn">🎯 Test Tous Boutons</button>
+      <button id="test-auth-flow" class="btn">🔐 Test Authentification</button>
+      <button id="test-menu-system" class="btn">🍽️ Test Système Menu</button>
+      <button id="stress-test" class="btn">⚡ Test de Stress</button>
+      <button id="clear-all" class="btn danger">🗑️ Reset</button>
+    </div>
+    
+    <div class="progress-bar">
+      <div id="progress-fill" class="progress-fill"></div>
+    </div>
+    
+    <div class="test-status">
+      <h3>🎯 État des Tests en Temps Réel</h3>
+      <div id="live-status" class="live-status">
+        <div class="status-item">
+          <span class="status-label">Popup Test:</span>
+          <span id="popup-status" class="status-value">🔄 En attente</span>
+        </div>
+        <div class="status-item">
+          <span class="status-label">Système Avis:</span>
+          <span id="avis-status" class="status-value">🔄 En attente</span>
+        </div>
+        <div class="status-item">
+          <span class="status-label">Événements DOM:</span>
+          <span id="events-status" class="status-value">🔄 En attente</span>
+        </div>
+        <div class="status-item">
+          <span class="status-label">Fonctions JS:</span>
+          <span id="functions-status" class="status-value">🔄 En attente</span>
+        </div>
+        <div class="status-item">
+          <span class="status-label">LocalStorage:</span>
+          <span id="storage-status" class="status-value">🔄 En attente</span>
+        </div>
+        <div class="status-item">
+          <span class="status-label">Score Global:</span>
+          <span id="global-score" class="status-value">🔄 0/100</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="test-section">
+      <h3>🧪 Tests Automatiques Détaillés</h3>
+      <div id="auto-tests" class="test-grid">
+        <!-- Tests seront générés dynamiquement -->
+      </div>
+    </div>
+    
+    <div class="test-section">
+      <h3>📋 Logs Détaillés du Diagnostic</h3>
+      <div id="diagnostic-logs" class="logs-area">
+Cliquez sur un bouton de test pour commencer le diagnostic...
+      </div>
+    </div>
+    
+    <div style="margin-top: 2rem; text-align: center;">
+      <a href="./index.html" class="btn">🏠 Retour à l'accueil</a>
+      <a href="./debug-system.html" class="btn">📊 Diagnostic Simple</a>
+    </div>
+  </div>
+
+  <!-- Scripts nécessaires -->
+  <script src="./app.js"></script>
+  <script src="./member.js"></script>
+  <script src="./avis-system.js"></script>
+  <script src="./error-tracker.js"></script>
+  
+  <script>
+    // SYSTÈME DE DIAGNOSTIC AVANCÉ COMPLET
+    class AdvancedDiagnostic {
+      constructor() {
+        this.tests = [];
+        this.results = {};
+        this.logs = [];
+        this.score = 0;
+        this.maxScore = 0;
+        this.isRunning = false;
+        
+        this.logArea = document.getElementById('diagnostic-logs');
+        this.progressFill = document.getElementById('progress-fill');
+        
+        this.initializeTests();
+        this.setupEventListeners();
+      }
+      
+      log(message, type = 'info') {
+        const timestamp = new Date().toLocaleTimeString();
+        const logEntry = `[${timestamp}] ${message}`;
+        this.logs.push({ message: logEntry, type });
+        
+        if (this.logArea) {
+          this.logArea.textContent += logEntry + '\n';
+          this.logArea.scrollTop = this.logArea.scrollHeight;
+        }
+        
+        console.log(logEntry);
+      }
+      
+      updateStatus(element, status, isSuccess = null) {
+        const el = document.getElementById(element);
+        if (el) {
+          let icon = '🔄';
+          if (isSuccess === true) icon = '✅';
+          else if (isSuccess === false) icon = '❌';
+          else if (status.includes('warning')) icon = '⚠️';
+          
+          el.textContent = `${icon} ${status}`;
+        }
+      }
+      
+      updateProgress(percentage) {
+        if (this.progressFill) {
+          this.progressFill.style.width = percentage + '%';
+        }
+      }
+      
+      updateGlobalScore() {
+        const score = Math.round((this.score / this.maxScore) * 100) || 0;
+        this.updateStatus('global-score', `${score}/100`, score > 80);
+      }
+      
+      initializeTests() {
+        this.tests = [
+          {
+            name: 'DOM Elements Check',
+            category: 'structure',
+            test: () => this.testDOMElements(),
+            weight: 15
+          },
+          {
+            name: 'JavaScript Functions',
+            category: 'functions',
+            test: () => this.testJavaScriptFunctions(),
+            weight: 20
+          },
+          {
+            name: 'Popup Interaction',
+            category: 'interaction',
+            test: () => this.testPopupInteraction(),
+            weight: 25
+          },
+          {
+            name: 'Event Handling',
+            category: 'events',
+            test: () => this.testEventHandling(),
+            weight: 20
+          },
+          {
+            name: 'LocalStorage Operations',
+            category: 'storage',
+            test: () => this.testLocalStorage(),
+            weight: 10
+          },
+          {
+            name: 'Authentication Flow',
+            category: 'auth',
+            test: () => this.testAuthFlow(),
+            weight: 10
+          }
+        ];
+        
+        this.maxScore = this.tests.reduce((sum, test) => sum + test.weight, 0);
+      }
+      
+      async testDOMElements() {
+        this.log('🔍 TEST: Vérification des éléments DOM critiques');
+        let score = 0;
+        const maxScore = 15;
+        
+        const elements = [
+          { id: 'open-rating-popup', name: 'Bouton Donner Avis' },
+          { id: 'rating-popup', name: 'Popup Notation' },
+          { id: 'rating-form-popup', name: 'Formulaire Popup' },
+          { id: 'comment-popup', name: 'Champ Commentaire' },
+          { id: 'avis-section', name: 'Section Avis' }
+        ];
+        
+        for (const element of elements) {
+          const el = document.getElementById(element.id);
+          if (el) {
+            this.log(`✅ ${element.name} trouvé`);
+            score += 3;
+            
+            // Test des propriétés
+            if (element.id === 'open-rating-popup') {
+              const hasClick = el.onclick !== null;
+              this.log(`  - Événement onclick: ${hasClick ? '✅' : '❌'}`);
+              if (hasClick) score += 2;
+            }
+            
+            if (element.id === 'rating-popup') {
+              const isHidden = el.style.display === 'none' || el.style.display === '';
+              this.log(`  - État initial caché: ${isHidden ? '✅' : '❌'}`);
+              if (isHidden) score += 1;
+            }
+          } else {
+            this.log(`❌ ${element.name} MANQUANT`, 'error');
+          }
+        }
+        
+        this.updateStatus('events-status', `${score}/${maxScore} éléments`, score === maxScore);
+        return score;
+      }
+      
+      async testJavaScriptFunctions() {
+        this.log('🔍 TEST: Vérification des fonctions JavaScript');
+        let score = 0;
+        const maxScore = 20;
+        
+        const functions = [
+          { name: 'window.currentUser', required: true },
+          { name: 'window.avisSys', required: true },
+          { name: 'window.avisSys.openPopup', required: true },
+          { name: 'window.avisSys.closePopup', required: true },
+          { name: 'window.avisSys.ajouterAvis', required: true },
+          { name: 'window.chargerMenuDuJour', required: false },
+          { name: 'window.renderAccountArea', required: false }
+        ];
+        
+        for (const func of functions) {
+          try {
+            const exists = eval(func.name) !== undefined;
+            if (exists) {
+              this.log(`✅ ${func.name} disponible`);
+              score += func.required ? 4 : 2;
+              
+              // Test d'exécution si possible
+              if (func.name === 'window.currentUser') {
+                try {
+                  const user = window.currentUser();
+                  this.log(`  - Retourne: ${user ? 'Utilisateur connecté' : 'Anonyme'}`);
+                } catch (e) {
+                  this.log(`  - Erreur d'exécution: ${e.message}`, 'warning');
+                }
+              }
+            } else {
+              this.log(`❌ ${func.name} MANQUANTE`, func.required ? 'error' : 'warning');
+            }
+          } catch (e) {
+            this.log(`❌ ${func.name} ERREUR: ${e.message}`, 'error');
+          }
+        }
+        
+        this.updateStatus('functions-status', `${score}/${maxScore} fonctions`, score >= maxScore * 0.8);
+        return score;
+      }
+      
+      async testPopupInteraction() {
+        this.log('🔍 TEST: Interaction popup en temps réel');
+        let score = 0;
+        const maxScore = 25;
+        
+        return new Promise((resolve) => {
+          try {
+            // Test 1: Vérifier l'état initial
+            const popup = document.getElementById('rating-popup');
+            if (!popup) {
+              this.log('❌ Popup introuvable', 'error');
+              this.updateStatus('popup-status', 'Popup manquant', false);
+              resolve(0);
+              return;
+            }
+            
+            const initiallyHidden = popup.style.display === 'none' || popup.style.display === '';
+            this.log(`📊 État initial popup: ${initiallyHidden ? 'Caché ✅' : 'Visible ❌'}`);
+            if (initiallyHidden) score += 5;
+            
+            // Test 2: Simuler le clic
+            const button = document.getElementById('open-rating-popup');
+            if (!button) {
+              this.log('❌ Bouton "Donner mon avis" introuvable', 'error');
+              this.updateStatus('popup-status', 'Bouton manquant', false);
+              resolve(score);
+              return;
+            }
+            
+            this.log('🔥 SIMULATION: Clic sur "Donner mon avis"');
+            
+            // Observer les changements
+            const observer = new MutationObserver((mutations) => {
+              mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+                  const isVisible = popup.style.display === 'flex' || popup.style.display === 'block';
+                  if (isVisible) {
+                    this.log('✅ SUCCÈS: Popup s\'est ouvert !');
+                    score += 15;
+                    this.updateStatus('popup-status', 'Popup fonctionne', true);
+                    
+                    // Test des éléments internes
+                    setTimeout(() => {
+                      const stars = popup.querySelectorAll('.star');
+                      const commentField = popup.querySelector('#comment-popup');
+                      
+                      this.log(`📊 Étoiles trouvées: ${stars.length}/5`);
+                      this.log(`📊 Champ commentaire: ${commentField ? '✅' : '❌'}`);
+                      
+                      if (stars.length === 5) score += 3;
+                      if (commentField) score += 2;
+                      
+                      // Fermer le popup
+                      if (window.avisSys && window.avisSys.closePopup) {
+                        window.avisSys.closePopup();
+                        this.log('🔒 Popup fermé automatiquement');
+                      }
+                      
+                      observer.disconnect();
+                      this.updateStatus('popup-status', `${score}/${maxScore} tests`, score >= maxScore * 0.8);
+                      resolve(score);
+                    }, 1000);
+                  }
+                }
+              });
+            });
+            
+            observer.observe(popup, { attributes: true, attributeFilter: ['style'] });
+            
+            // Déclencher le clic
+            setTimeout(() => {
+              try {
+                if (button.onclick) {
+                  this.log('🎯 Utilisation de onclick direct');
+                  button.onclick();
+                } else if (window.avisSys && window.avisSys.openPopup) {
+                  this.log('🎯 Utilisation de avisSys.openPopup');
+                  window.avisSys.openPopup();
+                } else {
+                  this.log('🎯 Simulation d\'événement click');
+                  button.click();
+                }
+                
+                // Timeout de sécurité
+                setTimeout(() => {
+                  const isVisible = popup.style.display === 'flex' || popup.style.display === 'block';
+                  if (!isVisible) {
+                    this.log('❌ ÉCHEC: Popup ne s\'est pas ouvert', 'error');
+                    this.updateStatus('popup-status', 'Popup ne fonctionne pas', false);
+                  }
+                  observer.disconnect();
+                  resolve(score);
+                }, 2000);
+                
+              } catch (e) {
+                this.log(`❌ Erreur lors du clic: ${e.message}`, 'error');
+                observer.disconnect();
+                this.updateStatus('popup-status', 'Erreur interaction', false);
+                resolve(score);
+              }
+            }, 500);
+            
+          } catch (e) {
+            this.log(`❌ Erreur test popup: ${e.message}`, 'error');
+            this.updateStatus('popup-status', 'Test échoué', false);
+            resolve(0);
+          }
+        });
+      }
+      
+      async testEventHandling() {
+        this.log('🔍 TEST: Gestion des événements');
+        let score = 0;
+        const maxScore = 20;
+        
+        // Test des événements attachés
+        const elements = ['open-rating-popup', 'close-rating-popup', 'submit-rating-popup'];
+        
+        for (const id of elements) {
+          const el = document.getElementById(id);
+          if (el) {
+            const hasOnClick = el.onclick !== null;
+            const hasListeners = getEventListeners ? getEventListeners(el).click : false;
+            
+            this.log(`📊 ${id}: onclick=${hasOnClick ? '✅' : '❌'}`);
+            if (hasOnClick) score += 6;
+          }
+        }
+        
+        // Test des gestionnaires globaux
+        if (window.addEventListener) {
+          this.log('✅ addEventListener disponible');
+          score += 2;
+        }
+        
+        this.updateStatus('events-status', `${score}/${maxScore} événements`, score >= maxScore * 0.7);
+        return score;
+      }
+      
+      async testLocalStorage() {
+        this.log('🔍 TEST: Opérations LocalStorage');
+        let score = 0;
+        const maxScore = 10;
+        
+        try {
+          // Test d'écriture
+          const testKey = 'orif_diagnostic_test';
+          localStorage.setItem(testKey, JSON.stringify({ test: true, timestamp: Date.now() }));
+          this.log('✅ Écriture LocalStorage OK');
+          score += 3;
+          
+          // Test de lecture
+          const data = JSON.parse(localStorage.getItem(testKey));
+          if (data && data.test) {
+            this.log('✅ Lecture LocalStorage OK');
+            score += 3;
+          }
+          
+          // Nettoyer
+          localStorage.removeItem(testKey);
+          
+          // Vérifier les données existantes
+          const avis = localStorage.getItem('orif_avis');
+          const menus = localStorage.getItem('orif_menus');
+          const user = localStorage.getItem('orif_user');
+          
+          this.log(`📊 Données existantes:`);
+          this.log(`  - Avis: ${avis ? 'Présents' : 'Vides'}`);
+          this.log(`  - Menus: ${menus ? 'Présents' : 'Vides'}`);
+          this.log(`  - Utilisateur: ${user ? 'Connecté' : 'Déconnecté'}`);
+          
+          score += 4;
+          
+        } catch (e) {
+          this.log(`❌ Erreur LocalStorage: ${e.message}`, 'error');
+        }
+        
+        this.updateStatus('storage-status', `${score}/${maxScore} opérations`, score >= maxScore * 0.8);
+        return score;
+      }
+      
+      async testAuthFlow() {
+        this.log('🔍 TEST: Flux d\'authentification');
+        let score = 0;
+        const maxScore = 10;
+        
+        try {
+          if (window.currentUser) {
+            const user = window.currentUser();
+            this.log(`📊 Utilisateur actuel: ${user ? user.name || 'Connecté' : 'Anonyme'}`);
+            
+            if (user) {
+              this.log(`  - Rôle: ${user.role || 'Non défini'}`);
+              this.log(`  - Email: ${user.email || 'Non défini'}`);
+              score += 5;
+            }
+            
+            score += 3;
+          }
+          
+          // Test du rendu de la zone compte
+          if (window.renderAccountArea) {
+            this.log('✅ Fonction renderAccountArea disponible');
+            score += 2;
+          }
+          
+        } catch (e) {
+          this.log(`❌ Erreur test auth: ${e.message}`, 'error');
+        }
+        
+        this.updateStatus('functions-status', `Auth: ${score}/${maxScore}`, score >= maxScore * 0.7);
+        return score;
+      }
+      
+      async runFullDiagnostic() {
+        if (this.isRunning) {
+          this.log('⚠️ Diagnostic déjà en cours...', 'warning');
+          return;
+        }
+        
+        this.isRunning = true;
+        this.score = 0;
+        this.logs = [];
+        this.logArea.textContent = '';
+        
+        this.log('🚀 DÉBUT DU DIAGNOSTIC COMPLET AVANCÉ');
+        this.log('=====================================');
+        
+        let progress = 0;
+        const progressStep = 100 / this.tests.length;
+        
+        for (const test of this.tests) {
+          this.log(`\n📋 Exécution: ${test.name}`);
+          
+          try {
+            const result = await test.test();
+            this.score += result;
+            this.results[test.name] = { score: result, maxScore: test.weight, success: result >= test.weight * 0.7 };
+            
+            this.log(`📊 Score: ${result}/${test.weight} (${Math.round((result/test.weight)*100)}%)`);
+            
+          } catch (e) {
+            this.log(`❌ Erreur test ${test.name}: ${e.message}`, 'error');
+            this.results[test.name] = { score: 0, maxScore: test.weight, success: false, error: e.message };
+          }
+          
+          progress += progressStep;
+          this.updateProgress(progress);
+          this.updateGlobalScore();
+          
+          // Petite pause pour l'UX
+          await new Promise(resolve => setTimeout(resolve, 200));
+        }
+        
+        this.log('\n=====================================');
+        this.log(`🏁 DIAGNOSTIC TERMINÉ`);
+        this.log(`📊 Score final: ${this.score}/${this.maxScore} (${Math.round((this.score/this.maxScore)*100)}%)`);
+        
+        // Analyse finale
+        const criticalIssues = Object.values(this.results).filter(r => !r.success && r.maxScore >= 20);
+        if (criticalIssues.length > 0) {
+          this.log(`⚠️ Problèmes critiques détectés: ${criticalIssues.length}`, 'warning');
+        } else {
+          this.log(`✅ Aucun problème critique détecté`);
+        }
+        
+        this.updateStatus('avis-status', 'Test terminé', this.score >= this.maxScore * 0.8);
+        this.isRunning = false;
+      }
+      
+      setupEventListeners() {
+        document.getElementById('run-full-diagnostic')?.addEventListener('click', () => {
+          this.runFullDiagnostic();
+        });
+        
+        document.getElementById('test-popup-interaction')?.addEventListener('click', () => {
+          this.testPopupInteraction();
+        });
+        
+        document.getElementById('clear-all')?.addEventListener('click', () => {
+          this.logs = [];
+          this.logArea.textContent = 'Logs effacés. Cliquez sur un test pour commencer...\n';
+          this.updateProgress(0);
+          this.score = 0;
+          this.updateGlobalScore();
+        });
+      }
+    }
+    
+    // Initialiser le diagnostic quand la page est chargée
+    document.addEventListener('DOMContentLoaded', () => {
+      window.advancedDiag = new AdvancedDiagnostic();
+      console.log('🔧 Diagnostic Avancé initialisé');
+    });
+  </script>
+</body>
+</html>

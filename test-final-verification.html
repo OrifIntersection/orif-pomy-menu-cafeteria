@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <title>Test Final de Vérification</title>
+  <style>
+    body { background: #1a1a1a; color: white; font-family: monospace; padding: 20px; }
+    .test-section { background: #2a2a2a; padding: 20px; margin: 10px 0; border-radius: 8px; }
+    button { background: #2b5a87; color: white; border: none; padding: 10px 20px; margin: 5px; border-radius: 4px; cursor: pointer; }
+    .success { color: #4ade80; }
+    .error { color: #f87171; }
+    .warning { color: #fbbf24; }
+    .result { background: #333; padding: 10px; margin: 5px 0; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <h1>✅ TEST FINAL DE VÉRIFICATION - ORIF</h1>
+  
+  <div class="test-section">
+    <h2>🎯 Test Complet avec Cache Bust</h2>
+    <button onclick="testerToutAvecCacheBust()">Test Final Complet</button>
+    <button onclick="effacer()">Effacer</button>
+  </div>
+
+  <div id="resultats" class="test-section">
+    <h2>📋 Résultats</h2>
+    <div id="output"></div>
+  </div>
+
+  <script>
+    function log(message, type = 'info') {
+      const output = document.getElementById('output');
+      const div = document.createElement('div');
+      div.className = `result ${type}`;
+      div.textContent = `${new Date().toLocaleTimeString()} - ${message}`;
+      output.appendChild(div);
+      output.scrollTop = output.scrollHeight;
+    }
+
+    function effacer() {
+      document.getElementById('output').innerHTML = '';
+    }
+
+    async function testerToutAvecCacheBust() {
+      effacer();
+      log('🚀 DÉBUT TEST FINAL AVEC CACHE BUST', 'warning');
+      
+      const pages = [
+        'index.html',
+        'login.html', 
+        'admin.html',
+        'archive.html',
+        'chef-management.html',
+        'debug-system.html',
+        'test-auth.html'
+      ];
+      
+      let totalOK = 0;
+      let totalErreur = 0;
+      
+      for (let i = 0; i < pages.length; i++) {
+        const page = pages[i];
+        log(`\n=== TEST ${i+1}/${pages.length}: ${page} ===`, 'info');
+        
+        try {
+          // Ajouter timestamp pour éviter le cache
+          const cacheBuster = `?t=${Date.now()}`;
+          const response = await fetch(page + cacheBuster);
+          
+          if (!response.ok) {
+            totalErreur++;
+            log(`❌ ${page} - HTTP ${response.status}`, 'error');
+            continue;
+          }
+          
+          log(`📡 ${page} - HTTP OK (${response.status})`, 'success');
+          
+          // Obtenir le contenu HTML
+          const html = await response.text();
+          
+          // Tests critiques
+          const tests = [
+            { nom: 'title', regex: /<title[^>]*>.*?<\/title>/i, critique: true },
+            { nom: 'header', regex: /<header[^>]*>.*?<\/header>/is, critique: false },
+            { nom: 'CSS style.css', regex: /href="\.\/style\.css"/i, critique: true },
+            { nom: 'CSS responsive.css', regex: /href="\.\/responsive\.css"/i, critique: false },
+            { nom: 'Script app.js', regex: /src="\.\/app\.js"/i, critique: true },
+            { nom: 'Chemin CSS incorrect', regex: /href="\.\/assets\/[^"]*\.css"/i, critique: false, inverse: true },
+            { nom: 'Chemin script incorrect', regex: /src="assets\/[^"]*\.js"/i, critique: false, inverse: true }
+          ];
+          
+          let erreursPage = [];
+          
+          tests.forEach(test => {
+            const found = test.regex.test(html);
+            const success = test.inverse ? !found : found;
+            
+            if (success) {
+              log(`    ✓ ${test.nom} OK`, 'success');
+            } else {
+              if (test.critique) {
+                erreursPage.push(`${test.nom} manquant/incorrect`);
+                log(`    ❌ ${test.nom} CRITIQUE manquant`, 'error');
+              } else {
+                if (test.inverse) {
+                  erreursPage.push(`${test.nom} trouvé (problème)`);
+                  log(`    ⚠️ ${test.nom} problématique détecté`, 'warning');
+                } else {
+                  log(`    ⚠️ ${test.nom} manquant (non critique)`, 'warning');
+                }
+              }
+            }
+          });
+          
+          if (erreursPage.length === 0) {
+            totalOK++;
+            log(`✅ ${page} - SUCCÈS COMPLET`, 'success');
+          } else {
+            totalErreur++;
+            log(`❌ ${page} - ERREURS: ${erreursPage.join(', ')}`, 'error');
+          }
+          
+        } catch (error) {
+          totalErreur++;
+          log(`❌ ${page} - EXCEPTION: ${error.message}`, 'error');
+        }
+        
+        // Pause entre tests
+        await new Promise(resolve => setTimeout(resolve, 1000));
+      }
+      
+      // Résumé final
+      log(`\n🎉 TEST FINAL TERMINÉ`, 'warning');
+      log(`✅ Pages OK: ${totalOK}`, 'success');
+      log(`❌ Pages en erreur: ${totalErreur}`, totalErreur > 0 ? 'error' : 'success');
+      log(`📊 Taux de réussite: ${Math.round((totalOK/pages.length)*100)}%`, totalOK === pages.length ? 'success' : 'warning');
+      
+      if (totalOK === pages.length) {
+        log(`🎊 FÉLICITATIONS! TOUTES LES PAGES SONT OPÉRATIONNELLES!`, 'success');
+      } else {
+        log(`⚠️ ${totalErreur} page(s) nécessitent encore des corrections`, 'warning');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      log('Page de test final chargée', 'info');
+      log('Prêt pour le test final avec cache bust', 'info');
+    });
+  </script>
+</body>
+</html>

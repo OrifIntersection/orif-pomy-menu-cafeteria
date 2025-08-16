@@ -1,0 +1,423 @@
+/* ===== Responsive Design - Stratégie Progressive ===== */
+
+/* ÉCRANS MOYENS (1200px à 1575px) - Header 2 lignes */
+@media (max-width: 1575px) and (min-width: 1201px) {
+  header {
+    height: 110px !important;
+    padding: 0.8rem 1rem !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    gap: 0.6rem !important;
+  }
+  
+  .header-nav {
+    top: 110px !important;
+  }
+  
+  body {
+    padding-top: 155px !important;
+  }
+  
+  .logo-container {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .user-options {
+    width: 100%;
+    justify-content: center;
+    gap: 1rem;
+    align-items: center;
+    margin-top: -0.4rem;
+  }
+  
+  .user-options a,
+  .user-options select {
+    padding: 0.5rem 1rem !important;
+    border: 2px solid rgba(255,255,255,.3) !important;
+    border-radius: 5px !important;
+    background: transparent !important;
+    color: #fff !important;
+    font-weight: 500 !important;
+    transition: 0.3s !important;
+    cursor: pointer !important;
+    text-decoration: none !important;
+    font-size: 1rem !important;
+  }
+  
+  .user-options a:hover,
+  .user-options select:hover {
+    background: rgba(255,255,255,.2) !important;
+    border-color: #fff !important;
+    transform: translateY(-2px) !important;
+  }
+}
+
+/* TABLETTES (800px à 1200px) - Header 2 lignes + Sidebar en bas */
+@media (max-width: 1200px) and (min-width: 801px) {
+  header {
+    height: 100px !important;
+    padding: 0.6rem 1rem !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    gap: 0.4rem !important;
+  }
+  
+  .header-nav {
+    top: 100px !important;
+  }
+  
+  body {
+    padding-top: 145px !important;
+  }
+  
+  .logo-container {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .user-options {
+    width: 100%;
+    justify-content: center;
+    gap: 0.8rem;
+    align-items: center;
+    margin-top: -0.4rem;
+  }
+  
+  .user-options a,
+  .user-options select {
+    padding: 0.4rem 0.8rem !important;
+    border: 2px solid rgba(255,255,255,.3) !important;
+    border-radius: 5px !important;
+    background: transparent !important;
+    color: #fff !important;
+    font-weight: 500 !important;
+    transition: 0.3s !important;
+    cursor: pointer !important;
+    text-decoration: none !important;
+    font-size: 0.9rem !important;
+  }
+  
+  .user-options a:hover,
+  .user-options select:hover {
+    background: rgba(255,255,255,.2) !important;
+    border-color: #fff !important;
+    transform: translateY(-2px) !important;
+  }
+  
+  .main-layout {
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 1rem;
+    gap: 1.5rem;
+    max-width: 100%;
+    width: 100%;
+  }
+  
+  .content {
+    order: 1;
+    width: 100%;
+    max-width: 100%;
+    flex: 1;
+  }
+  
+  .sidebar-combined {
+    width: 100%;
+    order: 2;
+    margin-top: 0;
+  }
+  
+  .section-card {
+    padding: 1.8rem;
+    margin-bottom: 1.2rem;
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+/* SMARTPHONES GRANDS (400px à 800px) */
+@media (max-width: 800px) and (min-width: 401px) {
+  header {
+    height: 95px !important;
+    padding: 0.5rem !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+  }
+  
+  .header-nav {
+    top: 95px !important;
+    padding: 0.4rem 0.3rem !important;
+  }
+  
+  body {
+    padding-top: 135px !important;
+  }
+  
+  .logo-container {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .logo-container > div {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 0.8rem;
+  }
+  
+  .user-options {
+    width: 100%;
+    justify-content: center;
+    gap: 0.6rem;
+    align-items: center;
+    margin-top: -0.4rem;
+  }
+  
+  .user-options a,
+  .user-options select {
+    padding: 0.4rem 0.7rem !important;
+    border: 2px solid rgba(255,255,255,.3) !important;
+    border-radius: 5px !important;
+    background: transparent !important;
+    color: #fff !important;
+    font-weight: 500 !important;
+    transition: 0.3s !important;
+    cursor: pointer !important;
+    text-decoration: none !important;
+    font-size: 0.85rem !important;
+  }
+  
+  .user-options a:hover,
+  .user-options select:hover {
+    background: rgba(255,255,255,.2) !important;
+    border-color: #fff !important;
+    transform: translateY(-2px) !important;
+  }
+  
+  .nav-container {
+    gap: 0.1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .nav-item {
+    padding: 0.3rem 0.5rem !important;
+    font-size: 0.8rem !important;
+  }
+  
+  .nav-divider {
+    font-size: 0.9rem !important;
+    margin: 0 0.1rem;
+  }
+  
+  .main-layout {
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 0.5rem !important;
+    gap: 1rem !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+  }
+  
+  .content {
+    order: 1 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  
+  .sidebar-combined {
+    order: 2 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-top: 0 !important;
+  }
+  
+  .section-card {
+    padding: 1.5rem;
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 1rem;
+  }
+  
+  h1 {
+    font-size: 1.1rem;
+  }
+  
+  .date {
+    font-size: 0.9rem;
+  }
+  
+  .logo-orif {
+    display: none !important;
+  }
+}
+
+/* SMARTPHONES MOYENS (200px à 400px) */
+@media (max-width: 400px) and (min-width: 201px) {
+  header {
+    height: 90px !important;
+    padding: 0.4rem !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 0.4rem !important;
+  }
+  
+  .header-nav {
+    top: 90px !important;
+  }
+  
+  body {
+    padding-top: 125px !important;
+  }
+  
+  .logo-container > div {
+    gap: 0.5rem;
+  }
+  
+  .user-options {
+    gap: 0.4rem;
+  }
+  
+  .user-options a,
+  .user-options select {
+    padding: 0.3rem 0.6rem !important;
+    border: 2px solid rgba(255,255,255,.3) !important;
+    border-radius: 5px !important;
+    background: transparent !important;
+    color: #fff !important;
+    font-weight: 500 !important;
+    transition: 0.3s !important;
+    cursor: pointer !important;
+    text-decoration: none !important;
+    font-size: 0.8rem !important;
+  }
+  
+  .user-options a:hover,
+  .user-options select:hover {
+    background: rgba(255,255,255,.2) !important;
+    border-color: #fff !important;
+    transform: translateY(-2px) !important;
+  }
+  
+  .main-layout {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.8rem !important;
+    padding: 0.3rem !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  
+  .content {
+    order: 1 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  
+  .sidebar-combined {
+    order: 2 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  
+  .section-card {
+    padding: 1rem;
+    width: 100%;
+    max-width: 100%;
+  }
+  
+  h1 {
+    font-size: 1rem;
+  }
+  
+  .date {
+    font-size: 0.8rem;
+  }
+  
+  .logo-orif {
+    display: none !important;
+  }
+}
+
+/* TRÈS PETITS ÉCRANS (≤ 200px) */
+@media (max-width: 200px) {
+  header {
+    height: 85px !important;
+    padding: 0.3rem !important;
+    gap: 0.3rem !important;
+  }
+  
+  .header-nav {
+    top: 85px !important;
+    padding: 0.2rem !important;
+  }
+  
+  body {
+    padding-top: 115px !important;
+  }
+  
+  .logo-container > div {
+    gap: 0.3rem;
+    flex-wrap: wrap;
+  }
+  
+  .user-options {
+    gap: 0.2rem;
+    flex-wrap: wrap;
+  }
+  
+  .user-options a,
+  .user-options select {
+    padding: 0.25rem 0.4rem !important;
+    border: 2px solid rgba(255,255,255,.3) !important;
+    border-radius: 3px !important;
+    background: transparent !important;
+    color: #fff !important;
+    font-weight: 500 !important;
+    transition: 0.3s !important;
+    cursor: pointer !important;
+    text-decoration: none !important;
+    font-size: 0.7rem !important;
+  }
+  
+  .user-options a:hover,
+  .user-options select:hover {
+    background: rgba(255,255,255,.2) !important;
+    border-color: #fff !important;
+  }
+  
+  .main-layout {
+    padding: 0.2rem !important;
+    gap: 0.5rem !important;
+  }
+  
+  .section-card {
+    padding: 0.8rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  h1 {
+    font-size: 0.9rem;
+  }
+  
+  .date {
+    font-size: 0.7rem;
+  }
+  
+  .logo-orif {
+    display: none !important;
+  }
+  
+  .nav-item {
+    padding: 0.2rem 0.3rem !important;
+    font-size: 0.65rem !important;
+  }
+  
+  .nav-divider {
+    font-size: 0.7rem !important;
+    margin: 0 0.05rem;
+  }
+}

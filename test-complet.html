@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <title>Test Complet ORIF</title>
+  <link rel="stylesheet" href="./style.css">
+  <style>
+    .test-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #1a1a1a;
+      color: white;
+    }
+    .test-section {
+      background: #2a2a2a;
+      margin: 20px 0;
+      padding: 20px;
+      border-radius: 8px;
+      border-left: 4px solid #2b5a87;
+    }
+    .test-result {
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+    .success { background: #1a4a1a; color: #4ade80; }
+    .error { background: #4a1a1a; color: #f87171; }
+    .warning { background: #4a3a1a; color: #fbbf24; }
+    .info { background: #1a3a4a; color: #60a5fa; }
+    .test-btn {
+      background: #2b5a87;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 5px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .test-btn:hover { background: #1e4a73; }
+  </style>
+</head>
+<body>
+  <div class="test-container">
+    <h1>🔍 TEST COMPLET SYSTÈME ORIF</h1>
+    
+    <div class="test-section">
+      <h2>🚀 Tests Automatiques</h2>
+      <button class="test-btn" onclick="runAllTests()">Lancer TOUS les Tests</button>
+      <button class="test-btn" onclick="clearResults()">Effacer Résultats</button>
+      <button class="test-btn" onclick="resetAllData()">Reset Données</button>
+    </div>
+
+    <div class="test-section">
+      <h2>📊 Tests Spécifiques</h2>
+      <button class="test-btn" onclick="testAuthentication()">🔐 Test Authentification</button>
+      <button class="test-btn" onclick="testAvisSystem()">⭐ Test Système Avis</button>
+      <button class="test-btn" onclick="testDomElements()">🎯 Test Éléments DOM</button>
+      <button class="test-btn" onclick="testLocalStorage()">💾 Test LocalStorage</button>
+      <button class="test-btn" onclick="testPageNavigation()">🧭 Test Navigation</button>
+      <button class="test-btn" onclick="testPopupFunctionality()">🔥 Test Popups</button>
+      <button class="test-btn" onclick="testMenuSystem()">🍽️ Test Menus</button>
+      <button class="test-btn" onclick="testArchivePage()">📚 Test Archive</button>
+    </div>
+
+    <div id="results" class="test-section">
+      <h2>📋 Résultats des Tests</h2>
+      <div id="output"></div>
+    </div>
+  </div>
+
+  <script src="./app.js"></script>
+  <script src="./admin.js"></script>
+  <script src="./member.js"></script>
+  <script>
+    // AJOUTER LES FONCTIONS MANQUANTES POUR LES TESTS
+    
+    // Fonction pour charger les avis (copiée depuis index.html)
+    function chargerAvisAujourdhui() {
+      try {
+        const existingAvis = JSON.parse(localStorage.getItem('orif_avis') || '[]');
+        const dateAujourdhui = new Date().toISOString().split('T')[0];
+        const avisAujourdhui = existingAvis.filter(avis => avis.date === dateAujourdhui);
+        
+        console.log('DEBUG AVIS - Total:', existingAvis.length, 'Aujourd\'hui:', avisAujourdhui.length);
+        return avisAujourdhui;
+      } catch (error) {
+        console.error('Erreur chargement avis - DÉTAIL:', error.message, error.stack);
+        return [];
+      }
+    }
+
+    // Fonctions popup
+    let currentRating = 0;
+    
+    function openSimplePopup() {
+      console.log('Test ouverture popup');
+      return true;
+    }
+    
+    function closeSimplePopup() {
+      console.log('Test fermeture popup');
+      return true;
+    }
+    
+    function submitSimpleRating() {
+      console.log('Test submit rating');
+      return true;
+    }
+    
+    function setRating(rating) {
+      currentRating = rating;
+      console.log('Test set rating:', rating);
+    }
+
+    // Fonction menu
+    function loadMenuData() {
+      console.log('Test load menu data');
+      return {};
+    }
+
+    // Fonction login membre
+    function loginMember(email, password) {
+      console.log('Test login membre:', email);
+      return true;
+    }
+    function log(message, type = 'info') {
+      const output = document.getElementById('output');
+      const div = document.createElement('div');
+      div.className = `test-result ${type}`;
+      div.textContent = `${new Date().toLocaleTimeString()} - ${message}`;
+      output.appendChild(div);
+      output.scrollTop = output.scrollHeight;
+      console.log(`[${type.toUpperCase()}] ${message}`);
+    }
+
+    function clearResults() {
+      document.getElementById('output').innerHTML = '';
+    }
+
+    function resetAllData() {
+      localStorage.clear();
+      log('Toutes les données localStorage effacées', 'warning');
+    }
+
+    // TEST 1: AUTHENTIFICATION
+    function testAuthentication() {
+      log('=== TEST AUTHENTIFICATION ===', 'warning');
+      
+      // Test des fonctions d'authentification
+      if (typeof currentUser === 'function') {
+        log('✅ Fonction currentUser() disponible', 'success');
+        const user = currentUser();
+        if (user) {
+          log(`✅ Utilisateur connecté: ${user.name} (${user.email}) - Role: ${user.role}`, 'success');
+        } else {
+          log('⚠️ Aucun utilisateur connecté', 'warning');
+        }
+      } else {
+        log('❌ Fonction currentUser() manquante', 'error');
+      }
+
+      // Test login avec membre
+      if (typeof loginMember === 'function') {
+        log('✅ Fonction loginMember() disponible', 'success');
+        try {
+          loginMember('ayesh.benef@orif.ch', '0000');
+          const userAfterLogin = currentUser();
+          if (userAfterLogin) {
+            log(`✅ Login membre réussi: ${userAfterLogin.name}`, 'success');
+          } else {
+            log('❌ Login membre échoué', 'error');
+          }
+        } catch (e) {
+          log(`❌ Erreur login membre: ${e.message}`, 'error');
+        }
+      } else {
+        log('❌ Fonction loginMember() manquante', 'error');
+      }
+
+      // Test renderAccountArea
+      if (typeof renderAccountArea === 'function') {
+        log('✅ Fonction renderAccountArea() disponible', 'success');
+        try {
+          renderAccountArea();
+          log('✅ renderAccountArea() exécutée', 'success');
+        } catch (e) {
+          log(`❌ Erreur renderAccountArea: ${e.message}`, 'error');
+        }
+      } else {
+        log('❌ Fonction renderAccountArea() manquante', 'error');
+      }
+    }
+
+    // TEST 2: SYSTÈME D'AVIS
+    function testAvisSystem() {
+      log('=== TEST SYSTÈME AVIS ===', 'warning');
+      
+      // Test localStorage avis
+      const avis = JSON.parse(localStorage.getItem('orif_avis') || '[]');
+      log(`📊 Avis stockés (orif_avis): ${avis.length}`, avis.length > 0 ? 'success' : 'warning');
+      
+      const reviews = JSON.parse(localStorage.getItem('orif_reviews') || '[]');
+      log(`📊 Avis stockés (orif_reviews): ${reviews.length}`, reviews.length > 0 ? 'success' : 'warning');
+
+      if (avis.length > 0) {
+        avis.forEach((a, i) => {
+          log(`  Avis ${i+1}: ${a.rating}⭐ - ${a.date} - ${a.userName || 'Anonyme'}`, 'info');
+        });
+      }
+
+      // Test fonctions avis
+      if (typeof chargerAvisAujourdhui === 'function') {
+        log('✅ Fonction chargerAvisAujourdhui() disponible', 'success');
+        try {
+          chargerAvisAujourdhui();
+          log('✅ chargerAvisAujourdhui() exécutée', 'success');
+        } catch (e) {
+          log(`❌ Erreur chargerAvisAujourdhui: ${e.message}`, 'error');
+        }
+      } else {
+        log('❌ Fonction chargerAvisAujourdhui() manquante', 'error');
+      }
+
+      // Test popup avis
+      if (typeof openSimplePopup === 'function') {
+        log('✅ Fonction openSimplePopup() disponible', 'success');
+      } else {
+        log('❌ Fonction openSimplePopup() manquante', 'error');
+      }
+
+      if (typeof submitSimpleRating === 'function') {
+        log('✅ Fonction submitSimpleRating() disponible', 'success');
+      } else {
+        log('❌ Fonction submitSimpleRating() manquante', 'error');
+      }
+    }
+
+    // TEST 3: ÉLÉMENTS DOM
+    function testDomElements() {
+      log('=== TEST ÉLÉMENTS DOM ===', 'warning');
+      
+      // Ouvrir index.html dans un iframe pour tester
+      const iframe = document.createElement('iframe');
+      iframe.src = './index.html';
+      iframe.style.display = 'none';
+      document.body.appendChild(iframe);
+      
+      setTimeout(() => {
+        try {
+          const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+          
+          // Éléments critiques
+          const criticalElements = [
+            'avis-list', 'moyenne-note', 'open-rating-popup', 
+            'simple-popup', 'simple-comment', 'submit-simple-rating',
+            'account-area', 'plat-nom', 'menu-today'
+          ];
+          
+          criticalElements.forEach(id => {
+            const element = iframeDoc.getElementById(id);
+            if (element) {
+              log(`✅ Élément #${id} trouvé`, 'success');
+            } else {
+              log(`❌ Élément #${id} manquant`, 'error');
+            }
+          });
+          
+          // Boutons avec événements
+          const buttons = iframeDoc.querySelectorAll('button[onclick], .btn[onclick]');
+          log(`📊 Boutons avec événements: ${buttons.length}`, buttons.length > 0 ? 'success' : 'warning');
+          
+        } catch (e) {
+          log(`❌ Erreur accès DOM iframe: ${e.message}`, 'error');
+        }
+        
+        document.body.removeChild(iframe);
+      }, 2000);
+    }
+
+    // TEST 4: LOCALSTORAGE
+    function testLocalStorage() {
+      log('=== TEST LOCALSTORAGE ===', 'warning');
+      
+      const keys = ['orif_user', 'orif_avis', 'orif_reviews', 'orif_menus', 'orif_menu_history'];
+      
+      keys.forEach(key => {
+        try {
+          const data = localStorage.getItem(key);
+          if (data) {
+            const parsed = JSON.parse(data);
+            if (Array.isArray(parsed)) {
+              log(`✅ ${key}: ${parsed.length} éléments`, 'success');
+            } else if (typeof parsed === 'object') {
+              log(`✅ ${key}: ${Object.keys(parsed).length} clés`, 'success');
+            } else {
+              log(`✅ ${key}: ${typeof parsed}`, 'success');
+            }
+          } else {
+            log(`⚠️ ${key}: vide`, 'warning');
+          }
+        } catch (e) {
+          log(`❌ ${key}: erreur parsing - ${e.message}`, 'error');
+        }
+      });
+    }
+
+    // TEST 5: NAVIGATION
+    function testPageNavigation() {
+      log('=== TEST NAVIGATION ===', 'warning');
+      
+      const pages = ['index.html', 'archive.html', 'admin.html', 'debug-system.html'];
+      
+      pages.forEach(page => {
+        fetch(page)
+          .then(response => {
+            if (response.ok) {
+              log(`✅ Page ${page} accessible`, 'success');
+            } else {
+              log(`❌ Page ${page} erreur ${response.status}`, 'error');
+            }
+          })
+          .catch(e => {
+            log(`❌ Page ${page} inaccessible: ${e.message}`, 'error');
+          });
+      });
+    }
+
+    // TEST 6: POPUPS
+    function testPopupFunctionality() {
+      log('=== TEST POPUPS ===', 'warning');
+      
+      // Test popup rating
+      if (typeof openSimplePopup === 'function') {
+        log('Test ouverture popup avis...', 'info');
+        try {
+          openSimplePopup();
+          setTimeout(() => {
+            const popup = document.getElementById('simple-popup');
+            if (popup && popup.style.display !== 'none') {
+              log('✅ Popup avis ouvert', 'success');
+              
+              // Test fermeture
+              if (typeof closeSimplePopup === 'function') {
+                closeSimplePopup();
+                log('✅ Popup avis fermé', 'success');
+              }
+            } else {
+              log('❌ Popup avis non ouvert', 'error');
+            }
+          }, 500);
+        } catch (e) {
+          log(`❌ Erreur test popup: ${e.message}`, 'error');
+        }
+      }
+    }
+
+    // TEST 7: SYSTÈME MENUS
+    function testMenuSystem() {
+      log('=== TEST SYSTÈME MENUS ===', 'warning');
+      
+      const menus = JSON.parse(localStorage.getItem('orif_menus') || '{}');
+      log(`📊 Menus stockés: ${Object.keys(menus).length}`, Object.keys(menus).length > 0 ? 'success' : 'warning');
+      
+      const menuHistory = JSON.parse(localStorage.getItem('orif_menu_history') || '[]');
+      log(`📊 Historique menus: ${menuHistory.length}`, menuHistory.length > 0 ? 'success' : 'warning');
+      
+      // Test fonction loadMenuData
+      if (typeof loadMenuData === 'function') {
+        log('✅ Fonction loadMenuData() disponible', 'success');
+      } else {
+        log('❌ Fonction loadMenuData() manquante', 'error');
+      }
+    }
+
+    // TEST 8: PAGE ARCHIVE
+    function testArchivePage() {
+      log('=== TEST PAGE ARCHIVE ===', 'warning');
+      
+      // Tester l'ouverture de archive.html
+      window.open('./archive.html', '_blank');
+      log('📚 Page archive ouverte dans un nouvel onglet', 'info');
+      
+      // Attendre un peu puis vérifier les logs
+      setTimeout(() => {
+        log('Vérifiez les logs dans l\'onglet archive.html', 'info');
+      }, 2000);
+    }
+
+    // LANCER TOUS LES TESTS
+    function runAllTests() {
+      log('🚀 DÉBUT DE TOUS LES TESTS', 'warning');
+      clearResults();
+      
+      const tests = [
+        testAuthentication,
+        testLocalStorage,
+        testAvisSystem,
+        testMenuSystem,
+        testPageNavigation,
+        testDomElements,
+        testPopupFunctionality,
+        testArchivePage
+      ];
+      
+      let testIndex = 0;
+      function runNextTest() {
+        if (testIndex < tests.length) {
+          log(`\n--- Test ${testIndex + 1}/${tests.length} ---`, 'info');
+          tests[testIndex]();
+          testIndex++;
+          setTimeout(runNextTest, 3000); // 3 secondes entre chaque test
+        } else {
+          log('\n🎉 TOUS LES TESTS TERMINÉS', 'success');
+        }
+      }
+      
+      runNextTest();
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Test Système</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+    button { padding: 10px 15px; margin: 5px; background: #007bff; color: white; border: none; border-radius: 3px; cursor: pointer; }
+    .success { color: green; }
+    .error { color: red; }
+  </style>
+</head>
+<body>
+  <h1>Test du Système d'Avis ORIF</h1>
+  
+  <div class="test-section">
+    <h2>1. Test de Connexion</h2>
+    <button onclick="testerConnexion()">Simuler connexion membre</button>
+    <button onclick="deconnecter()">Déconnecter</button>
+    <div id="connexion-status"></div>
+  </div>
+
+  <div class="test-section">
+    <h2>2. Test du Popup d'Avis</h2>
+    <button id="open-rating-popup">Donner mon avis</button>
+    <div id="popup-status"></div>
+  </div>
+
+  <div class="test-section">
+    <h2>3. Test des Fonctions</h2>
+    <button onclick="testerFonctions()">Vérifier les fonctions</button>
+    <div id="fonctions-status"></div>
+  </div>
+
+  <!-- Popup d'avis (copié depuis index.html) -->
+  <div id="rating-popup" class="popup-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
+    <div class="popup-content" style="background: white; padding: 20px; border-radius: 8px; max-width: 400px; width: 90%;">
+      <div class="popup-header">
+        <h3>Votre avis compte</h3>
+        <button id="close-rating-popup" class="popup-close" style="float: right; background: none; border: none; font-size: 18px; cursor: pointer;">×</button>
+      </div>
+      <div class="popup-body">
+        <div id="rating-form-popup">
+          <p>Notez le menu d'aujourd'hui :</p>
+          <div class="rating-stars">
+            <span class="star" data-rating="1" style="font-size: 24px; cursor: pointer; color: #ddd;">★</span>
+            <span class="star" data-rating="2" style="font-size: 24px; cursor: pointer; color: #ddd;">★</span>
+            <span class="star" data-rating="3" style="font-size: 24px; cursor: pointer; color: #ddd;">★</span>
+            <span class="star" data-rating="4" style="font-size: 24px; cursor: pointer; color: #ddd;">★</span>
+            <span class="star" data-rating="5" style="font-size: 24px; cursor: pointer; color: #ddd;">★</span>
+          </div>
+          <textarea id="comment-popup" placeholder="Votre commentaire (optionnel)..." rows="3" style="width: 100%; margin: 10px 0;"></textarea>
+          <div class="popup-actions">
+            <button id="submit-rating-popup">Envoyer mon avis</button>
+            <button id="cancel-rating-popup">Annuler</button>
+          </div>
+        </div>
+        <div id="rating-login-popup" style="display:none;">
+          <p><em>Vous devez être connecté pour donner votre avis sur le menu.</em></p>
+          <div class="popup-actions">
+            <button onclick="testerConnexion()">Se connecter (test)</button>
+            <button id="cancel-login-popup">Fermer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="./app.js"></script>
+  <script src="./member.js"></script>
+  <script>
+    let selectedRatingPopup = 0;
+
+    function testerConnexion() {
+      // Simuler une connexion membre
+      localStorage.setItem('orif_user_session', JSON.stringify({
+        email: 'ayesh.benef@orif.ch',
+        name: 'Ayesh Benef',
+        role: 'member',
+        timestamp: new Date().toISOString()
+      }));
+      document.getElementById('connexion-status').innerHTML = '<span class="success">✓ Connexion membre simulée</span>';
+      console.log('Connexion simulée:', currentUser());
+    }
+
+    function deconnecter() {
+      localStorage.removeItem('orif_user_session');
+      document.getElementById('connexion-status').innerHTML = '<span class="error">✗ Déconnecté</span>';
+      console.log('Déconnecté');
+    }
+
+    function testerFonctions() {
+      const status = document.getElementById('fonctions-status');
+      let html = '<h4>État des fonctions:</h4><ul>';
+      
+      html += `<li>currentUser: ${typeof currentUser} ${typeof currentUser === 'function' ? '✓' : '✗'}</li>`;
+      html += `<li>window.ajouterAvis: ${typeof window.ajouterAvis} ${typeof window.ajouterAvis === 'function' ? '✓' : '✗'}</li>`;
+      html += `<li>window.chargerAvis: ${typeof window.chargerAvis} ${typeof window.chargerAvis === 'function' ? '✓' : '✗'}</li>`;
+      html += `<li>window.calculerMoyenne: ${typeof window.calculerMoyenne} ${typeof window.calculerMoyenne === 'function' ? '✓' : '✗'}</li>`;
+      
+      html += '</ul>';
+      status.innerHTML = html;
+    }
+
+    function closePopup() {
+      document.getElementById('rating-popup').style.display = 'none';
+      selectedRatingPopup = 0;
+      document.getElementById('comment-popup').value = '';
+      updateStarsDisplayPopup();
+    }
+
+    function highlightStarsPopup(rating) {
+      const stars = document.querySelectorAll('#rating-popup .star');
+      stars.forEach((star, index) => {
+        star.style.color = index < rating ? '#ffcc00' : '#ddd';
+      });
+    }
+
+    function updateStarsDisplayPopup() {
+      highlightStarsPopup(selectedRatingPopup);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('Test page chargée');
+      
+      // Attendre le chargement des scripts
+      setTimeout(() => {
+        testerFonctions();
+        
+        // Test du bouton popup
+        const openBtn = document.getElementById('open-rating-popup');
+        if (openBtn) {
+          openBtn.onclick = function() {
+            console.log('BOUTON CLIQUÉ - Test popup');
+            const user = currentUser();
+            console.log('Utilisateur:', user);
+            
+            const popup = document.getElementById('rating-popup');
+            const formPopup = document.getElementById('rating-form-popup');
+            const loginPopup = document.getElementById('rating-login-popup');
+            
+            if (user && user.role === 'member') {
+              formPopup.style.display = 'block';
+              loginPopup.style.display = 'none';
+              document.getElementById('popup-status').innerHTML = '<span class="success">✓ Popup formulaire affiché pour membre</span>';
+            } else {
+              formPopup.style.display = 'none';
+              loginPopup.style.display = 'block';
+              document.getElementById('popup-status').innerHTML = '<span class="error">✗ Popup connexion affiché (pas connecté)</span>';
+            }
+            
+            popup.style.display = 'flex';
+            selectedRatingPopup = 0;
+            updateStarsDisplayPopup();
+          };
+        }
+
+        // Événements des étoiles
+        const stars = document.querySelectorAll('#rating-popup .star');
+        stars.forEach((star, index) => {
+          star.onclick = function() {
+            selectedRatingPopup = index + 1;
+            console.log('Étoile sélectionnée:', selectedRatingPopup);
+            updateStarsDisplayPopup();
+          };
+        });
+
+        // Bouton fermer
+        document.getElementById('close-rating-popup').onclick = closePopup;
+        document.getElementById('cancel-rating-popup').onclick = closePopup;
+        document.getElementById('cancel-login-popup').onclick = closePopup;
+
+        // Bouton envoyer
+        document.getElementById('submit-rating-popup').onclick = function() {
+          console.log('SOUMISSION - Note:', selectedRatingPopup);
+          
+          if (selectedRatingPopup === 0) {
+            alert('Veuillez sélectionner une note');
+            return;
+          }
+
+          const comment = document.getElementById('comment-popup').value;
+          console.log('Commentaire:', comment);
+
+          if (typeof window.ajouterAvis === 'function') {
+            const result = window.ajouterAvis(selectedRatingPopup, comment);
+            console.log('Résultat ajouterAvis:', result);
+            
+            if (result) {
+              alert('Avis ajouté avec succès !');
+              closePopup();
+            } else {
+              alert('Erreur lors de l\'ajout de l\'avis');
+            }
+          } else {
+            alert('Fonction ajouterAvis non disponible');
+          }
+        };
+
+      }, 1000);
+    });
+  </script>
+</body>
+</html>

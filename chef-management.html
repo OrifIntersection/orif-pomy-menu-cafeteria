@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gestion Chef - ORIF-POMY</title>
+  <link rel="stylesheet" href="./style.css"/>
+  <link rel="stylesheet" href="./responsive.css"/>
+</head>
+<body>
+  <header>
+    <div class="logo-container">
+      <img src="./logo-orif.png" alt="Logo ORIF" class="logo-orif" />
+      <div>
+        <h1>Gestion du Chef – ORIF-POMY</h1>
+        <p class="date">Configuration</p>
+      </div>
+    </div>
+
+    <div class="user-options">
+      <a class="btn" href="./index.html">Retour</a>
+      <a class="btn" href="./admin.html">Admin</a>
+    </div>
+  </header>
+
+  <div class="header-nav">
+    <div class="nav-container">
+      <a href="#" class="nav-item active">Gestion Chef</a>
+    </div>
+  </div>
+
+  <div class="main-layout">
+    <main class="content">
+      <div style="background: #e3f2fd; border: 1px solid #2196f3; color: #0d47a1; padding: 1rem; border-radius: 8px; margin-bottom: 2rem;">
+        <h3>👨‍🍳 Configuration du Chef</h3>
+        <p>Personnalisez les informations du chef qui apparaissent sur la page principale.</p>
+      </div>
+
+      <!-- Formulaire de gestion du chef -->
+      <section class="section-card">
+        <h2>Informations actuelles du chef</h2>
+        <div id="chef-actuel" style="border: 1px solid #ddd; padding: 1rem; border-radius: 6px; margin-bottom: 1rem;">
+          <img id="chef-photo-actuelle" src="./Philippe_Etchebest.jpg" alt="Chef actuel" style="width: 150px; height: 150px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem;"/>
+          <p><strong>Nom:</strong> <span id="chef-nom-actuel">Monsieur Philippe Etchebest</span></p>
+          <p><strong>Description:</strong> <span id="chef-desc-actuelle">Chef passionné par la cuisine du monde et la valorisation des produits locaux. Présent à l'ORIF depuis 8 ans.</span></p>
+        </div>
+
+        <h3>Modifier le chef</h3>
+        <form id="form-chef">
+          <div style="margin-bottom: 1rem;">
+            <label for="chef-nom" style="display: block; margin-bottom: 0.5rem; font-weight: bold;">Nom complet du chef:</label>
+            <input type="text" id="chef-nom" style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px;" placeholder="Ex: Monsieur Philippe Etchebest"/>
+          </div>
+
+          <div style="margin-bottom: 1rem;">
+            <label for="chef-description" style="display: block; margin-bottom: 0.5rem; font-weight: bold;">Description:</label>
+            <textarea id="chef-description" rows="4" style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px;" placeholder="Décrivez l'expérience et la passion du chef..."></textarea>
+          </div>
+
+          <div style="margin-bottom: 1rem;">
+            <label style="display: block; margin-bottom: 0.5rem; font-weight: bold;">Photo du chef:</label>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
+              <div class="chef-option" data-photo="./Philippe_Etchebest.jpg">
+                <img src="./Philippe_Etchebest.jpg" alt="Philippe Etchebest" style="width: 100%; height: 120px; object-fit: cover; border-radius: 6px; cursor: pointer; border: 3px solid transparent;" onclick="selectionnerChef(this, './Philippe_Etchebest.jpg')"/>
+                <p style="text-align: center; margin-top: 0.5rem; font-size: 0.8rem;">Philippe Etchebest</p>
+              </div>
+              <div class="chef-option" data-photo="attached_assets/generated_images/Coq_au_vin_dish_34d5050a.png">
+                <img src="attached_assets/generated_images/Coq_au_vin_dish_34d5050a.png" alt="Chef généré" style="width: 100%; height: 120px; object-fit: cover; border-radius: 6px; cursor: pointer; border: 3px solid transparent;" onclick="selectionnerChef(this, 'attached_assets/generated_images/Coq_au_vin_dish_34d5050a.png')"/>
+                <p style="text-align: center; margin-top: 0.5rem; font-size: 0.8rem;">Image générée</p>
+              </div>
+            </div>
+            <input type="hidden" id="chef-photo-selectionnee" value="./Philippe_Etchebest.jpg"/>
+            <button type="button" onclick="genererPhotoChef()" class="btn" style="margin-top: 0.5rem;">Générer nouvelle photo</button>
+          </div>
+
+          <div style="text-align: right;">
+            <button type="button" onclick="resetChef()" class="btn btn-outline">Réinitialiser</button>
+            <button type="submit" class="btn">Enregistrer les modifications</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Preview -->
+      <section class="section-card">
+        <h3>Prévisualisation</h3>
+        <div id="chef-preview" style="border: 1px solid #ddd; padding: 1rem; border-radius: 6px; background: #f9f9f9;">
+          <h4>Le Chef du jour : <span id="preview-nom">Monsieur Philippe Etchebest</span></h4>
+          <img id="preview-photo" src="./Philippe_Etchebest.jpg" alt="Chef" style="width: 200px; height: 200px; object-fit: cover; border-radius: 8px; margin: 1rem 0;"/>
+          <p id="preview-description">Chef passionné par la cuisine du monde et la valorisation des produits locaux. Présent à l'ORIF depuis 8 ans.</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <footer style="background: #2c3e50; color: white; text-align: center; padding: 2rem 1rem 1rem; margin-top: 2rem;">
+    <p style="margin: 0 0 1rem 0; color: white;">© 2025 ORIF – Tous droits réservés</p>
+    <div class="footer-links" style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
+      <a href="#" style="color: #bdc3c7; text-decoration: none; font-size: 0.9rem;">Mentions légales</a>
+      <a href="#" style="color: #bdc3c7; text-decoration: none; font-size: 0.9rem;">Conditions d'utilisation</a>
+      <a href="#" style="color: #bdc3c7; text-decoration: none; font-size: 0.9rem;">Politique de confidentialité</a>
+      <a href="#" style="color: #bdc3c7; text-decoration: none; font-size: 0.9rem;">Accessibilité</a>
+    </div>
+  </footer>
+
+  <script src="./app.js"></script>
+  <script>
+    let chefActuel = {
+      nom: "Monsieur Philippe Etchebest",
+      description: "Chef passionné par la cuisine du monde et la valorisation des produits locaux. Présent à l'ORIF depuis 8 ans.",
+      photo: "./Philippe_Etchebest.jpg"
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      chargerChefActuel();
+      mettreAJourPreview();
+    });
+
+    function chargerChefActuel() {
+      const chefSauvegarde = localStorage.getItem('orif_chef_info');
+      if (chefSauvegarde) {
+        chefActuel = JSON.parse(chefSauvegarde);
+      }
+      
+      // Mettre à jour l'affichage
+      document.getElementById('chef-nom-actuel').textContent = chefActuel.nom;
+      document.getElementById('chef-desc-actuelle').textContent = chefActuel.description;
+      document.getElementById('chef-photo-actuelle').src = chefActuel.photo;
+      
+      // Pré-remplir le formulaire
+      document.getElementById('chef-nom').value = chefActuel.nom;
+      document.getElementById('chef-description').value = chefActuel.description;
+      document.getElementById('chef-photo-selectionnee').value = chefActuel.photo;
+      
+      // Sélectionner la photo actuelle
+      const photos = document.querySelectorAll('.chef-option img');
+      photos.forEach(img => {
+        if (img.src.includes(chefActuel.photo.split('/').pop())) {
+          img.style.border = '3px solid #2b5a87';
+        }
+      });
+    }
+
+    function selectionnerChef(img, photo) {
+      // Réinitialiser toutes les bordures
+      document.querySelectorAll('.chef-option img').forEach(i => {
+        i.style.border = '3px solid transparent';
+      });
+      
+      // Sélectionner cette photo
+      img.style.border = '3px solid #2b5a87';
+      document.getElementById('chef-photo-selectionnee').value = photo;
+      
+      mettreAJourPreview();
+    }
+
+    function mettreAJourPreview() {
+      const nom = document.getElementById('chef-nom').value || chefActuel.nom;
+      const description = document.getElementById('chef-description').value || chefActuel.description;
+      const photo = document.getElementById('chef-photo-selectionnee').value;
+      
+      document.getElementById('preview-nom').textContent = nom;
+      document.getElementById('preview-description').textContent = description;
+      document.getElementById('preview-photo').src = photo;
+    }
+
+    async function genererPhotoChef() {
+      const nom = document.getElementById('chef-nom').value || 'Chef professionnel';
+      alert(`Génération d'une photo pour "${nom}" en cours...`);
+      // Ici on pourrait intégrer avec l'API de génération d'images
+      // Pour l'instant, on utilise l'image existante comme placeholder
+    }
+
+    function resetChef() {
+      document.getElementById('chef-nom').value = "Monsieur Philippe Etchebest";
+      document.getElementById('chef-description').value = "Chef passionné par la cuisine du monde et la valorisation des produits locaux. Présent à l'ORIF depuis 8 ans.";
+      document.getElementById('chef-photo-selectionnee').value = "./Philippe_Etchebest.jpg";
+      
+      // Réinitialiser la sélection visuelle
+      document.querySelectorAll('.chef-option img').forEach(img => {
+        img.style.border = '3px solid transparent';
+      });
+      document.querySelector('[data-photo="./Philippe_Etchebest.jpg"] img').style.border = '3px solid #2b5a87';
+      
+      mettreAJourPreview();
+    }
+
+    // Écouter les changements pour mettre à jour la préview
+    document.getElementById('chef-nom').addEventListener('input', mettreAJourPreview);
+    document.getElementById('chef-description').addEventListener('input', mettreAJourPreview);
+
+    // Soumettre le formulaire
+    document.getElementById('form-chef').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const nouveauChef = {
+        nom: document.getElementById('chef-nom').value.trim(),
+        description: document.getElementById('chef-description').value.trim(),
+        photo: document.getElementById('chef-photo-selectionnee').value
+      };
+      
+      if (!nouveauChef.nom || !nouveauChef.description) {
+        alert('Veuillez remplir tous les champs obligatoires.');
+        return;
+      }
+      
+      // Sauvegarder dans localStorage
+      localStorage.setItem('orif_chef_info', JSON.stringify(nouveauChef));
+      chefActuel = nouveauChef;
+      
+      alert('✅ Informations du chef mises à jour avec succès !');
+      chargerChefActuel();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <title>Connexion ORIF</title>
+  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./responsive.css">
+</head>
+<body>
+  <header>
+    <div class="logo-container">
+      <img src="./logo-orif.png" alt="Logo ORIF" class="logo-orif" />
+      <div>
+        <h1>Connexion</h1>
+      </div>
+    </div>
+    <div class="user-options">
+      <a href="./index.html" class="btn">🏠 Page d'accueil</a>
+    </div>
+  </header>
+
+  <div class="header-nav">
+    <div class="nav-container">
+      <a href="#" class="nav-item active">Connexion</a>
+    </div>
+  </div>
+
+  <main class="content">
+    <div class="section-card">
+      <form id="login-form">
+        <label>Email ORIF</label>
+        <input type="email" id="email" placeholder="prenom.nom@orif.ch" required />
+        <label>Mot de passe</label>
+        <input type="password" id="password" placeholder="0000" required />
+        <button type="submit">Se connecter</button>
+      </form>
+      <p style="margin-top:.75rem;font-size:.9rem;">
+        Comptes de démo :<br>
+        • <code>ayesh.admin@orif.ch</code> / <code>0000</code> (admin)<br>
+        • <code>ayesh.benef@orif.ch</code> / <code>0000</code> (membre)
+      </p>
+    </div>
+  </main>
+
+  <footer style="background: #2c3e50; color: white; text-align: center; padding: 2rem 1rem 1rem; margin-top: auto;">
+    <p style="margin: 0 0 1rem 0; color: white;">© 2025 ORIF – Tous droits réservés</p>
+    <div class="footer-links" style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
+      <a href="#" style="color: #bdc3c7; text-decoration: none; font-size: 0.9rem;">Mentions légales</a>
+      <a href="#" style="color: #bdc3c7; text-decoration: none; font-size: 0.9rem;">Conditions d'utilisation</a>
+      <a href="#" style="color: #bdc3c7; text-decoration: none; font-size: 0.9rem;">Politique de confidentialité</a>
+      <a href="#" style="color: #bdc3c7; text-decoration: none; font-size: 0.9rem;">Accessibilité</a>
+    </div>
+  </footer>
+
+  <script src="./app.js"></script>
+  <script>
+    document.getElementById('login-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
+      
+      console.log("Formulaire soumis avec:", email, password);
+      
+      const session = login(email, password);
+      console.log("Résultat de la connexion:", session);
+      
+      if (!session) {
+        alert('Identifiants invalides. Utilisez les comptes de démo fournis.');
+        return;
+      }
+      
+      // Redirection selon le rôle
+      if (session.role === "admin") {
+        console.log("Redirection admin vers admin.html");
+        alert('Bienvenue ' + session.name + ' ! Vous allez être dirigé vers la page d\u0027administration.');
+        setTimeout(() => {
+          window.location.href = "admin.html";
+        }, 1000);
+      } else if (session.role === "member") {
+        console.log("Redirection membre vers index.html");
+        alert('Bienvenue ' + session.name + ' ! Vous pouvez maintenant donner votre avis sur les menus.');
+        setTimeout(() => {
+          window.location.href = "index.html";
+        }, 1000);
+      } else {
+        console.log("Redirection par défaut vers index.html");
+        setTimeout(() => {
+          window.location.href = "index.html";
+        }, 1000);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,362 @@
+// SOLUTION RADICALE - SYSTÈME D'AVIS COMPLET ET AUTONOME
+(function() {
+  'use strict';
+  
+  let selectedRating = 0;
+  
+  // Système d'avis local autonome
+  function ajouterAvis(note, commentaire) {
+    try {
+      const user = window.currentUser ? window.currentUser() : null;
+      if (!user || user.role !== 'member') {
+        console.error('Utilisateur non autorisé');
+        return false;
+      }
+      
+      const avis = {
+        id: Date.now(),
+        note: parseInt(note),
+        commentaire: commentaire || '',
+        date: new Date().toISOString().split('T')[0],
+        timestamp: new Date().toISOString(),
+        user: user.name || 'Anonyme'
+      };
+      
+      let avisData = JSON.parse(localStorage.getItem('orif_avis') || '[]');
+      avisData.unshift(avis);
+      avisData = avisData.slice(0, 100); // Garder 100 derniers avis
+      
+      localStorage.setItem('orif_avis', JSON.stringify(avisData));
+      console.log('✅ Avis ajouté avec succès:', avis);
+      return true;
+    } catch (error) {
+      console.error('❌ Erreur ajout avis:', error);
+      return false;
+    }
+  }
+
+  // Charger et afficher les avis
+  function chargerAvis() {
+    try {
+      const avis = JSON.parse(localStorage.getItem('orif_avis') || '[]');
+      const today = new Date().toISOString().split('T')[0];
+      const avisAujourdhui = avis.filter(a => a.date === today);
+      
+      let moyenne = 0;
+      if (avisAujourdhui.length > 0) {
+        moyenne = avisAujourdhui.reduce((sum, a) => sum + a.note, 0) / avisAujourdhui.length;
+      }
+      
+      // Mettre à jour l'affichage
+      const moyenneElement = document.getElementById('moyenne-avis');
+      const nbAvisElement = document.getElementById('nb-avis');
+      
+      if (moyenneElement) {
+        moyenneElement.textContent = moyenne > 0 ? moyenne.toFixed(1) : '--';
+      }
+      if (nbAvisElement) {
+        nbAvisElement.textContent = avisAujourdhui.length;
+      }
+      
+      console.log('📊 Avis chargés - Nombre:', avisAujourdhui.length, 'Moyenne:', moyenne.toFixed(1));
+      return avisAujourdhui;
+    } catch (error) {
+      console.error('❌ Erreur chargement avis:', error);
+      return [];
+    }
+  }
+
+  // Gestion des étoiles - SOLUTION RADICALE
+  function highlightStars(rating) {
+    const stars = document.querySelectorAll('#rating-popup .star');
+    stars.forEach((star, index) => {
+      star.style.color = index < rating ? '#ffcc00' : '#ddd';
+      star.style.transition = 'color 0.2s';
+    });
+  }
+  
+  // SOLUTION RADICALE - Initialiser les étoiles avec événements directs
+  function initializeStars() {
+    const stars = document.querySelectorAll('#rating-popup .star');
+    console.log('🔍 Étoiles trouvées:', stars.length);
+    
+    stars.forEach((star, index) => {
+      const rating = index + 1;
+      
+      // FORCER les styles d'affichage
+      star.style.cursor = 'pointer';
+      star.style.fontSize = '28px';
+      star.style.display = 'inline-block';
+      star.style.margin = '0 5px';
+      star.style.color = '#ddd';
+      star.style.transition = 'color 0.2s, transform 0.1s';
+      
+      // ÉVÉNEMENTS MULTIPLES pour garantir le fonctionnement
+      
+      // 1. onclick direct
+      star.onclick = function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        selectedRating = rating;
+        highlightStars(rating);
+        console.log('⭐ CLICK - Note sélectionnée:', rating);
+      };
+      
+      // 2. addEventListener
+      star.addEventListener('click', function(e) {
+        e.preventDefault();
+        selectedRating = rating;
+        highlightStars(rating);
+        console.log('⭐ EVENT - Note sélectionnée:', rating);
+      });
+      
+      // 3. Événements hover
+      star.addEventListener('mouseenter', function() {
+        highlightStars(rating);
+        star.style.transform = 'scale(1.1)';
+      });
+      
+      star.addEventListener('mouseleave', function() {
+        highlightStars(selectedRating);
+        star.style.transform = 'scale(1)';
+      });
+      
+      // 4. Touch pour mobile
+      star.addEventListener('touchstart', function(e) {
+        e.preventDefault();
+        selectedRating = rating;
+        highlightStars(rating);
+        console.log('📱 TOUCH - Note sélectionnée:', rating);
+      });
+    });
+    
+    console.log('⭐ Étoiles initialisées avec événements multiples:', stars.length);
+  }
+
+  function updateStarsDisplay() {
+    highlightStars(selectedRating);
+  }
+
+  // Fermer le popup
+  function closePopup() {
+    const popup = document.getElementById('rating-popup');
+    if (popup) popup.style.display = 'none';
+    selectedRating = 0;
+    const commentField = document.getElementById('comment-popup');
+    if (commentField) commentField.value = '';
+    updateStarsDisplay();
+    console.log('🔒 Popup fermé');
+  }
+
+  // Ouvrir le popup
+  function openRatingPopup() {
+    console.log('🚀 OUVERTURE POPUP D\'AVIS');
+    
+    const user = window.currentUser ? window.currentUser() : null;
+    const popup = document.getElementById('rating-popup');
+    const formPopup = document.getElementById('rating-form-popup');
+    const loginPopup = document.getElementById('rating-login-popup');
+    
+    console.log('🎯 DEBUG - Utilisateur:', user);
+    console.log('🎯 DEBUG - Popup trouvé:', !!popup);
+    console.log('🎯 DEBUG - Form popup trouvé:', !!formPopup);
+    console.log('🎯 DEBUG - Login popup trouvé:', !!loginPopup);
+    
+    if (!popup) {
+      console.error('❌ Popup rating-popup introuvable');
+      return;
+    }
+
+    // Ouvrir le popup dans tous les cas
+    popup.style.display = 'flex';
+    
+    if (user && user.role === 'member') {
+      console.log(`✅ Utilisateur membre autorisé: ${user.name}`);
+      if (formPopup) formPopup.style.display = 'block';
+      if (loginPopup) loginPopup.style.display = 'none';
+      selectedRating = 0;
+      
+      // FORCE D'INITIALISATION COMPLÈTE - DÉLAI MULTIPLE
+      setTimeout(() => {
+        initializeStars();
+        highlightStars(0);
+        
+        // Assurer l'affichage des éléments
+        const commentArea = document.getElementById('comment-popup');
+        const submitBtn = document.getElementById('submit-rating-popup');
+        
+        if (commentArea) {
+          commentArea.style.display = 'block';
+          commentArea.style.visibility = 'visible';
+          commentArea.value = '';
+        }
+        if (submitBtn) {
+          submitBtn.style.display = 'inline-block';
+          submitBtn.style.visibility = 'visible';
+        }
+        
+        console.log('🎯 Popup totalement initialisé avec étoiles actives');
+        
+        // SECONDE INITIALISATION pour être sûr
+        setTimeout(() => {
+          initializeStars();
+          console.log('🔄 Seconde initialisation des étoiles');
+        }, 200);
+        
+      }, 50);
+      
+    } else {
+      console.log('❌ Connexion requise - Affichage formulaire de connexion');
+      if (formPopup) formPopup.style.display = 'none';
+      if (loginPopup) loginPopup.style.display = 'block';
+    }
+    
+    const commentField = document.getElementById('comment-popup');
+    if (commentField) commentField.value = '';
+    
+    console.log('✅ Popup ouvert avec succès');
+  }
+
+  // Soumettre un avis
+  function submitRating() {
+    console.log('📝 SOUMISSION AVIS - Note:', selectedRating);
+    
+    if (selectedRating === 0) {
+      alert('Veuillez sélectionner une note avant d\'envoyer votre avis.');
+      return;
+    }
+
+    const commentField = document.getElementById('comment-popup');
+    const comment = commentField ? commentField.value.trim() : '';
+    
+    const success = ajouterAvis(selectedRating, comment);
+    
+    if (success) {
+      alert('Merci pour votre avis !');
+      closePopup();
+      chargerAvis(); // Recharger l'affichage
+    } else {
+      alert('Erreur lors de l\'enregistrement de votre avis. Vérifiez que vous êtes bien connecté.');
+    }
+  }
+
+  // Initialisation complète
+  function init() {
+    console.log('🔧 INITIALISATION SYSTÈME D\'AVIS AUTONOME');
+    
+    // Charger les avis existants
+    chargerAvis();
+    
+    // Attacher le bouton principal - SOLUTION TRIPLE SÉCURITÉ
+    const openBtn = document.getElementById('open-rating-popup');
+    console.log('🎯 DEBUG: Bouton trouvé:', openBtn);
+    
+    if (openBtn) {
+      // Nettoyer tous les événements existants
+      openBtn.onclick = null;
+      openBtn.removeEventListener('click', openRatingPopup);
+      
+      // TRIPLE ATTACHEMENT pour garantir le fonctionnement
+      
+      // 1. onclick direct
+      openBtn.onclick = function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('🔥 ONCLICK - Bouton Donner mon avis');
+        openRatingPopup();
+        return false;
+      };
+      
+      // 2. addEventListener
+      openBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('🔥 EVENTLISTENER - Bouton Donner mon avis');
+        openRatingPopup();
+        return false;
+      });
+      
+      // 3. Attribute onclick en dur
+      openBtn.setAttribute('onclick', 'console.log("🔥 ATTRIBUT - Clic détecté"); window.avisSys.openPopup(); return false;');
+      
+      console.log('✅ Bouton "Donner mon avis" attaché TRIPLE SÉCURITÉ');
+    } else {
+      console.error('❌ Bouton "open-rating-popup" introuvable');
+    }
+
+    // Boutons de fermeture
+    const closeBtn = document.getElementById('close-rating-popup');
+    const cancelBtn = document.getElementById('cancel-rating-popup');
+    const cancelLoginBtn = document.getElementById('cancel-login-popup');
+    
+    if (closeBtn) closeBtn.onclick = closePopup;
+    if (cancelBtn) cancelBtn.onclick = closePopup;
+    if (cancelLoginBtn) cancelLoginBtn.onclick = closePopup;
+
+    // Fermeture par clic sur overlay
+    const popup = document.getElementById('rating-popup');
+    if (popup) {
+      popup.onclick = function(e) {
+        if (e.target === popup) closePopup();
+      };
+    }
+
+    // Gestion des étoiles
+    const stars = document.querySelectorAll('#rating-popup .star');
+    stars.forEach((star, index) => {
+      star.onclick = function() {
+        selectedRating = index + 1;
+        updateStarsDisplay();
+        console.log('⭐ Étoile sélectionnée:', selectedRating);
+      };
+      
+      star.onmouseover = function() {
+        highlightStars(index + 1);
+      };
+      
+      star.onmouseout = function() {
+        updateStarsDisplay();
+      };
+      
+      // Améliorer le style
+      star.style.cursor = 'pointer';
+      star.style.userSelect = 'none';
+    });
+
+    // Bouton de soumission
+    const submitBtn = document.getElementById('submit-rating-popup');
+    if (submitBtn) {
+      submitBtn.onclick = submitRating;
+      console.log('✅ Bouton de soumission attaché');
+    }
+
+    console.log('🎉 Système d\'avis initialisé avec succès');
+  }
+
+  // Attendre le DOM et les autres scripts
+  function waitAndInit() {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(init, 500); // Délai pour les autres scripts
+      });
+    } else {
+      setTimeout(init, 500);
+    }
+  }
+
+  // Exposer les fonctions globalement - ACCÈS DIRECT
+  window.avisSys = {
+    ajouterAvis: ajouterAvis,
+    chargerAvis: chargerAvis,
+    openPopup: openRatingPopup,
+    closePopup: closePopup
+  };
+  
+  // Exposition directe pour debug
+  window.openRatingPopup = openRatingPopup;
+  window.closeRatingPopup = closePopup;
+
+  // Démarrer l'initialisation
+  waitAndInit();
+
+})();

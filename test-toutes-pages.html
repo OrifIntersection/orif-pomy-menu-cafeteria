@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <title>Test Complet de Toutes les Pages</title>
+  <style>
+    body { background: #1a1a1a; color: white; font-family: monospace; padding: 20px; }
+    .test-section { background: #2a2a2a; padding: 20px; margin: 10px 0; border-radius: 8px; }
+    button { background: #2b5a87; color: white; border: none; padding: 10px 20px; margin: 5px; border-radius: 4px; cursor: pointer; }
+    .success { color: #4ade80; }
+    .error { color: #f87171; }
+    .warning { color: #fbbf24; }
+    iframe { width: 100%; height: 400px; border: 1px solid #444; margin: 10px 0; }
+  </style>
+</head>
+<body>
+  <h1>🔍 TEST COMPLET DE TOUTES LES PAGES ORIF</h1>
+  
+  <div class="test-section">
+    <h2>🚀 Tests Automatiques</h2>
+    <button onclick="testerToutesLesPages()">Tester TOUTES les Pages</button>
+    <button onclick="effacerResultats()">Effacer Résultats</button>
+    <div id="resultats-globaux"></div>
+  </div>
+
+  <div class="test-section">
+    <h2>📊 Tests Spécifiques par Page</h2>
+    <button onclick="testerPage('index.html')">index.html</button>
+    <button onclick="testerPage('login.html')">login.html</button>
+    <button onclick="testerPage('admin.html')">admin.html</button>
+    <button onclick="testerPage('archive.html')">archive.html</button>
+    <button onclick="testerPage('chef-management.html')">chef-management.html</button>
+    <button onclick="testerPage('debug-system.html')">debug-system.html</button>
+    <button onclick="testerPage('test-auth.html')">test-auth.html</button>
+  </div>
+
+  <div id="results" class="test-section">
+    <h2>📋 Résultats des Tests</h2>
+    <div id="output"></div>
+  </div>
+
+  <script>
+    function log(message, type = 'info') {
+      const output = document.getElementById('output');
+      const div = document.createElement('div');
+      div.className = type;
+      div.textContent = `${new Date().toLocaleTimeString()} - ${message}`;
+      output.appendChild(div);
+      output.scrollTop = output.scrollHeight;
+      console.log(`[${type.toUpperCase()}] ${message}`);
+    }
+
+    function effacerResultats() {
+      document.getElementById('output').innerHTML = '';
+      document.getElementById('resultats-globaux').innerHTML = '';
+    }
+
+    const PAGES_A_TESTER = [
+      'index.html',
+      'login.html', 
+      'admin.html',
+      'archive.html',
+      'chef-management.html',
+      'debug-system.html',
+      'test-auth.html',
+      'test-complet.html',
+      'diagnostic-advanced.html'
+    ];
+
+    async function testerToutesLesPages() {
+      log('🚀 DÉBUT DU TEST COMPLET DE TOUTES LES PAGES', 'warning');
+      effacerResultats();
+      
+      let totalPages = PAGES_A_TESTER.length;
+      let pagesOK = 0;
+      let pagesErreur = 0;
+      
+      for (let i = 0; i < PAGES_A_TESTER.length; i++) {
+        const page = PAGES_A_TESTER[i];
+        log(`\n=== TEST ${i+1}/${totalPages}: ${page} ===`, 'info');
+        
+        try {
+          const resultat = await testerPageComplete(page);
+          if (resultat.success) {
+            pagesOK++;
+            log(`✅ ${page} - OK`, 'success');
+          } else {
+            pagesErreur++;
+            log(`❌ ${page} - ERREUR: ${resultat.error}`, 'error');
+          }
+        } catch (e) {
+          pagesErreur++;
+          log(`❌ ${page} - EXCEPTION: ${e.message}`, 'error');
+        }
+        
+        // Attendre 2 secondes entre chaque test
+        await new Promise(resolve => setTimeout(resolve, 2000));
+      }
+      
+      // Résumé final
+      const globaux = document.getElementById('resultats-globaux');
+      globaux.innerHTML = `
+        <h3>📊 RÉSULTATS GLOBAUX</h3>
+        <div class="success">✅ Pages OK: ${pagesOK}</div>
+        <div class="error">❌ Pages en erreur: ${pagesErreur}</div>
+        <div>📄 Total testé: ${totalPages}</div>
+        <div>🎯 Taux de réussite: ${Math.round((pagesOK/totalPages)*100)}%</div>
+      `;
+      
+      log(`\n🎉 TEST COMPLET TERMINÉ - ${pagesOK}/${totalPages} pages OK`, 'success');
+    }
+
+    async function testerPageComplete(pageUrl) {
+      return new Promise((resolve) => {
+        // Test 1: Accessibilité HTTP
+        fetch(pageUrl)
+          .then(response => {
+            if (!response.ok) {
+              resolve({ success: false, error: `HTTP ${response.status}` });
+              return;
+            }
+            
+            log(`  📡 ${pageUrl} - HTTP OK (${response.status})`, 'success');
+            
+            // Test 2: Chargement dans iframe
+            const iframe = document.createElement('iframe');
+            iframe.src = pageUrl;
+            iframe.style.display = 'none';
+            document.body.appendChild(iframe);
+            
+            let timeoutId = setTimeout(() => {
+              document.body.removeChild(iframe);
+              resolve({ success: false, error: 'Timeout chargement' });
+            }, 10000);
+            
+            iframe.onload = function() {
+              clearTimeout(timeoutId);
+              
+              try {
+                const doc = iframe.contentDocument || iframe.contentWindow.document;
+                
+                // Test 3: Vérifier les éléments critiques
+                const tests = [
+                  { nom: 'title', selecteur: 'title', critique: true },
+                  { nom: 'header', selecteur: 'header', critique: true },
+                  { nom: 'main/content', selecteur: 'main, .content', critique: false },
+                  { nom: 'footer', selecteur: 'footer', critique: false },
+                  { nom: 'scripts', selecteur: 'script[src]', critique: false }
+                ];
+                
+                let erreurs = [];
+                tests.forEach(test => {
+                  const elements = doc.querySelectorAll(test.selecteur);
+                  if (elements.length === 0 && test.critique) {
+                    erreurs.push(`Élément ${test.nom} manquant`);
+                  } else if (elements.length > 0) {
+                    log(`    ✓ ${test.nom} trouvé (${elements.length})`, 'success');
+                  }
+                });
+                
+                // Test 4: Vérifier les liens CSS
+                const cssLinks = doc.querySelectorAll('link[rel="stylesheet"]');
+                cssLinks.forEach((link, i) => {
+                  const href = link.getAttribute('href');
+                  if (href && href.includes('assets/')) {
+                    erreurs.push(`CSS avec chemin incorrect: ${href}`);
+                  } else {
+                    log(`    ✓ CSS ${i+1}: ${href}`, 'success');
+                  }
+                });
+                
+                // Test 5: Vérifier les scripts
+                const scripts = doc.querySelectorAll('script[src]');
+                scripts.forEach((script, i) => {
+                  const src = script.getAttribute('src');
+                  if (src && src.includes('assets/')) {
+                    erreurs.push(`Script avec chemin incorrect: ${src}`);
+                  } else {
+                    log(`    ✓ Script ${i+1}: ${src}`, 'success');
+                  }
+                });
+                
+                document.body.removeChild(iframe);
+                
+                if (erreurs.length > 0) {
+                  resolve({ success: false, error: erreurs.join(', ') });
+                } else {
+                  resolve({ success: true });
+                }
+                
+              } catch (e) {
+                document.body.removeChild(iframe);
+                resolve({ success: false, error: `Erreur DOM: ${e.message}` });
+              }
+            };
+            
+            iframe.onerror = function() {
+              clearTimeout(timeoutId);
+              document.body.removeChild(iframe);
+              resolve({ success: false, error: 'Erreur chargement iframe' });
+            };
+            
+          })
+          .catch(error => {
+            resolve({ success: false, error: `Fetch error: ${error.message}` });
+          });
+      });
+    }
+
+    async function testerPage(pageUrl) {
+      log(`\n🔍 TEST SPÉCIFIQUE: ${pageUrl}`, 'warning');
+      const resultat = await testerPageComplete(pageUrl);
+      
+      if (resultat.success) {
+        log(`✅ ${pageUrl} - SUCCÈS`, 'success');
+      } else {
+        log(`❌ ${pageUrl} - ÉCHEC: ${resultat.error}`, 'error');
+      }
+    }
+
+    // Initialisation
+    document.addEventListener('DOMContentLoaded', () => {
+      log('🔧 Page de test toutes pages chargée', 'info');
+      log(`📋 ${PAGES_A_TESTER.length} pages à tester: ${PAGES_A_TESTER.join(', ')}`, 'info');
+    });
+  </script>
+</body>
+</html>

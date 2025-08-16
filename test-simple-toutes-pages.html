@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <title>Test Simple Toutes Pages</title>
+  <style>
+    body { background: #1a1a1a; color: white; font-family: monospace; padding: 20px; }
+    .result { background: #2a2a2a; padding: 10px; margin: 5px 0; border-radius: 4px; }
+    .success { color: #4ade80; }
+    .error { color: #f87171; }
+    button { background: #2b5a87; color: white; border: none; padding: 10px 20px; margin: 5px; border-radius: 4px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>🔍 TEST SIMPLE DE TOUTES LES PAGES</h1>
+  
+  <button onclick="testerRapide()">Test Rapide</button>
+  <button onclick="effacer()">Effacer</button>
+  
+  <div id="resultats"></div>
+
+  <script>
+    function effacer() { document.getElementById('resultats').innerHTML = ''; }
+    
+    function log(msg, type) {
+      const div = document.createElement('div');
+      div.className = `result ${type}`;
+      div.textContent = `${new Date().toLocaleTimeString()} - ${msg}`;
+      document.getElementById('resultats').appendChild(div);
+    }
+
+    async function testerRapide() {
+      effacer();
+      log('🚀 DÉBUT TEST RAPIDE', 'success');
+      
+      const pages = [
+        'index.html', 'login.html', 'admin.html', 'archive.html', 
+        'chef-management.html', 'debug-system.html', 'test-auth.html'
+      ];
+      
+      let ok = 0, erreur = 0;
+      
+      for (const page of pages) {
+        try {
+          const response = await fetch(page);
+          if (response.ok) {
+            log(`✅ ${page} - HTTP ${response.status}`, 'success');
+            ok++;
+          } else {
+            log(`❌ ${page} - HTTP ${response.status}`, 'error');
+            erreur++;
+          }
+        } catch (e) {
+          log(`❌ ${page} - Erreur: ${e.message}`, 'error');
+          erreur++;
+        }
+        await new Promise(r => setTimeout(r, 500));
+      }
+      
+      log(`📊 RÉSULTATS: ${ok} OK, ${erreur} erreurs`, ok > erreur ? 'success' : 'error');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      log('Page de test simple chargée', 'success');
+    });
+  </script>
+</body>
+</html>

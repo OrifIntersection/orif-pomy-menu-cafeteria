@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test d'Exécution - ORIF</title>
+  <link rel="stylesheet" href="./style.css">
+  <style>
+    .test-container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: #424549;
+      color: white;
+      border-radius: 8px;
+    }
+    
+    .test-section {
+      background: #36393f;
+      padding: 1.5rem;
+      margin: 1rem 0;
+      border-radius: 8px;
+      border-left: 4px solid #7289da;
+    }
+    
+    .test-logs {
+      background: #2f3136;
+      color: #00ff00;
+      padding: 1rem;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.85rem;
+      max-height: 400px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      margin: 1rem 0;
+    }
+    
+    .test-status {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      margin: 0.25rem 0;
+    }
+    
+    .status-success { background: #3ba55c; color: white; }
+    .status-error { background: #ed4245; color: white; }
+    .status-warning { background: #faa61a; color: white; }
+    .status-running { background: #5865f2; color: white; }
+    
+    .btn {
+      background: #5865f2;
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 4px;
+      cursor: pointer;
+      margin: 0.5rem 0.5rem 0.5rem 0;
+      font-size: 0.9rem;
+    }
+    
+    .btn:hover { background: #4752c4; }
+    .btn.danger { background: #ed4245; }
+    .btn.danger:hover { background: #c73741; }
+    
+    .execution-result {
+      margin: 1rem 0;
+      padding: 1rem;
+      border-radius: 4px;
+      border-left: 4px solid #7289da;
+    }
+    
+    .result-success { border-color: #3ba55c; background: rgba(59, 165, 92, 0.1); }
+    .result-error { border-color: #ed4245; background: rgba(237, 66, 69, 0.1); }
+    .result-warning { border-color: #faa61a; background: rgba(250, 166, 26, 0.1); }
+  </style>
+</head>
+<body>
+  <div class="test-container">
+    <h1>🧪 Test d'Exécution en Temps Réel</h1>
+    <p>Teste vraiment l'exécution des fonctions et vérifie les résultats avant/pendant/après.</p>
+    
+    <div class="test-section">
+      <h3>Tests Automatiques</h3>
+      <button class="btn" onclick="testPopupExecution()">🔥 Tester Popup "Donner mon avis"</button>
+      <button class="btn" onclick="testButtonClick()">🎯 Tester Clic Bouton</button>
+      <button class="btn" onclick="testAllFunctions()">⚡ Tester Toutes Fonctions</button>
+      <button class="btn" onclick="testAuthFlow()">🔐 Tester Authentification</button>
+      <button class="btn danger" onclick="clearLogs()">🗑️ Effacer</button>
+    </div>
+    
+    <div class="test-section">
+      <h3>📊 Résultats des Tests</h3>
+      <div id="test-status">
+        <div>État Popup: <span id="popup-state" class="test-status status-running">Test en attente</span></div>
+        <div>Fonctions JS: <span id="functions-state" class="test-status status-running">Test en attente</span></div>
+        <div>Événements: <span id="events-state" class="test-status status-running">Test en attente</span></div>
+      </div>
+    </div>
+    
+    <div class="test-section">
+      <h3>📋 Logs d'Exécution Détaillés</h3>
+      <div id="execution-logs" class="test-logs">
+Prêt à tester. Cliquez sur un bouton pour commencer les tests d'exécution...
+      </div>
+    </div>
+    
+    <div class="test-section">
+      <h3>🔍 Résultats d'Analyse</h3>
+      <div id="analysis-results"></div>
+    </div>
+    
+    <div style="margin-top: 2rem; text-align: center;">
+      <a href="./index.html" class="btn">🏠 Retour à l'accueil</a>
+      <a href="./diagnostic-advanced.html" class="btn">🔧 Diagnostic Avancé</a>
+    </div>
+  </div>
+
+  <!-- Scripts nécessaires -->
+  <script src="./app.js"></script>
+  <script src="./member.js"></script>
+  <script src="./avis-system.js"></script>
+  <script src="./error-tracker.js"></script>
+  
+  <script>
+    // SYSTÈME DE TEST D'EXÉCUTION RÉEL
+    
+    let logs = [];
+    const logsArea = document.getElementById('execution-logs');
+    const analysisArea = document.getElementById('analysis-results');
+    
+    function log(message, type = 'info') {
+      const timestamp = new Date().toLocaleTimeString();
+      const colors = {
+        info: '#00ff00',
+        error: '#ff6666',
+        warning: '#ffaa00',
+        success: '#66ff66',
+        debug: '#66aaff'
+      };
+      
+      const logEntry = `[${timestamp}] ${message}`;
+      logs.push({ message: logEntry, type });
+      
+      if (logsArea) {
+        logsArea.textContent += logEntry + '\n';
+        logsArea.scrollTop = logsArea.scrollHeight;
+      }
+      
+      console.log(logEntry);
+      return logEntry;
+    }
+    
+    function updateStatus(elementId, text, type) {
+      const el = document.getElementById(elementId);
+      if (el) {
+        el.textContent = text;
+        el.className = `test-status status-${type}`;
+      }
+    }
+    
+    function addAnalysisResult(title, content, type = 'info') {
+      const resultDiv = document.createElement('div');
+      resultDiv.className = `execution-result result-${type}`;
+      resultDiv.innerHTML = `<h4>${title}</h4><p>${content}</p>`;
+      analysisArea.appendChild(resultDiv);
+    }
+    
+    function clearLogs() {
+      logs = [];
+      if (logsArea) logsArea.textContent = 'Logs effacés. Prêt pour de nouveaux tests...\n';
+      if (analysisArea) analysisArea.innerHTML = '';
+      updateStatus('popup-state', 'Test en attente', 'running');
+      updateStatus('functions-state', 'Test en attente', 'running');
+      updateStatus('events-state', 'Test en attente', 'running');
+    }
+    
+    async function testPopupExecution() {
+      log('🔥 DÉBUT TEST EXÉCUTION POPUP', 'info');
+      log('=================================', 'info');
+      
+      updateStatus('popup-state', 'Test en cours...', 'running');
+      
+      // ÉTAPE 1: Vérification des éléments
+      log('\n📋 ÉTAPE 1: Vérification des éléments DOM', 'info');
+      
+      const button = document.getElementById('open-rating-popup');
+      const popup = document.getElementById('rating-popup');
+      
+      if (!button) {
+        log('❌ ERREUR: Bouton "open-rating-popup" introuvable', 'error');
+        updateStatus('popup-state', 'Bouton manquant', 'error');
+        addAnalysisResult('Test Popup', 'Le bouton "Donner mon avis" est introuvable dans le DOM', 'error');
+        return;
+      }
+      
+      if (!popup) {
+        log('❌ ERREUR: Popup "rating-popup" introuvable', 'error');
+        updateStatus('popup-state', 'Popup manquant', 'error');
+        addAnalysisResult('Test Popup', 'L\'élément popup est introuvable dans le DOM', 'error');
+        return;
+      }
+      
+      log('✅ Bouton trouvé: ' + button.tagName, 'success');
+      log('✅ Popup trouvé: ' + popup.tagName, 'success');
+      
+      // ÉTAPE 2: État initial
+      log('\n📊 ÉTAPE 2: Analyse de l\'état initial', 'info');
+      
+      const initialDisplay = popup.style.display;
+      const initialVisibility = popup.style.visibility;
+      const computedStyle = window.getComputedStyle(popup);
+      
+      log(`🔍 Display initial: "${initialDisplay || 'non défini'}"`, 'debug');
+      log(`🔍 Visibility initial: "${initialVisibility || 'non défini'}"`, 'debug');
+      log(`🔍 Display calculé: "${computedStyle.display}"`, 'debug');
+      
+      const isInitiallyHidden = (initialDisplay === 'none') || 
+                                (computedStyle.display === 'none') ||
+                                (initialDisplay === '');
+      
+      if (isInitiallyHidden) {
+        log('✅ État initial correct: popup caché', 'success');
+      } else {
+        log('⚠️ État initial: popup visible (peut être normal)', 'warning');
+      }
+      
+      // ÉTAPE 3: Test des événements attachés
+      log('\n🎯 ÉTAPE 3: Vérification des événements', 'info');
+      
+      const hasOnClick = button.onclick !== null;
+      const onClickAttr = button.getAttribute('onclick');
+      
+      log(`📋 onclick property: ${hasOnClick ? 'OUI' : 'NON'}`, hasOnClick ? 'success' : 'warning');
+      log(`📋 onclick attribute: ${onClickAttr ? 'OUI' : 'NON'}`, onClickAttr ? 'success' : 'warning');
+      
+      if (!hasOnClick && !onClickAttr) {
+        log('❌ ERREUR: Aucun événement onclick détecté', 'error');
+        updateStatus('events-state', 'Événements manquants', 'error');
+        addAnalysisResult('Événements', 'Le bouton n\'a pas d\'événement onclick attaché', 'error');
+        return;
+      }
+      
+      updateStatus('events-state', 'Événements OK', 'success');
+      
+      // ÉTAPE 4: Test des fonctions disponibles
+      log('\n🔧 ÉTAPE 4: Vérification des fonctions', 'info');
+      
+      if (!window.avisSys) {
+        log('❌ ERREUR: window.avisSys non disponible', 'error');
+        updateStatus('functions-state', 'AvisSys manquant', 'error');
+        addAnalysisResult('Fonctions', 'Le système d\'avis (avisSys) n\'est pas initialisé', 'error');
+        return;
+      }
+      
+      if (typeof window.avisSys.openPopup !== 'function') {
+        log('❌ ERREUR: avisSys.openPopup n\'est pas une fonction', 'error');
+        updateStatus('functions-state', 'openPopup manquant', 'error');
+        addAnalysisResult('Fonctions', 'La fonction openPopup n\'est pas disponible', 'error');
+        return;
+      }
+      
+      log('✅ avisSys disponible', 'success');
+      log('✅ openPopup disponible', 'success');
+      updateStatus('functions-state', 'Fonctions OK', 'success');
+      
+      // ÉTAPE 5: EXÉCUTION RÉELLE
+      log('\n🚀 ÉTAPE 5: EXÉCUTION DU TEST', 'info');
+      log('🔥 Tentative d\'ouverture du popup...', 'warning');
+      
+      try {
+        // Observer les changements
+        const observer = new MutationObserver((mutations) => {
+          mutations.forEach((mutation) => {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+              const newDisplay = popup.style.display;
+              log(`🔄 Changement détecté: display = "${newDisplay}"`, 'debug');
+            }
+          });
+        });
+        
+        observer.observe(popup, { attributes: true, attributeFilter: ['style'] });
+        
+        // Exécuter la fonction
+        window.avisSys.openPopup();
+        log('✅ Fonction openPopup() exécutée sans erreur', 'success');
+        
+        // Vérification immédiate
+        const immediateDisplay = popup.style.display;
+        log(`📊 Display immédiatement après: "${immediateDisplay}"`, 'debug');
+        
+        // Vérification après délai
+        setTimeout(() => {
+          const delayedDisplay = popup.style.display;
+          const isNowVisible = (delayedDisplay === 'flex') || 
+                               (delayedDisplay === 'block') ||
+                               (window.getComputedStyle(popup).display !== 'none');
+          
+          log(`📊 Display après 500ms: "${delayedDisplay}"`, 'debug');
+          log(`📊 Popup visible: ${isNowVisible ? 'OUI' : 'NON'}`, isNowVisible ? 'success' : 'error');
+          
+          if (isNowVisible) {
+            log('🎉 SUCCÈS TOTAL: Le popup s\'ouvre correctement!', 'success');
+            updateStatus('popup-state', 'Fonctionne parfaitement', 'success');
+            addAnalysisResult('Test Popup', 'Le popup s\'ouvre correctement quand on clique sur "Donner mon avis"', 'success');
+            
+            // Test de fermeture
+            if (window.avisSys.closePopup) {
+              setTimeout(() => {
+                log('\n🔒 Test de fermeture automatique...', 'info');
+                window.avisSys.closePopup();
+                
+                setTimeout(() => {
+                  const closedDisplay = popup.style.display;
+                  const isNowHidden = (closedDisplay === 'none') || 
+                                     (window.getComputedStyle(popup).display === 'none');
+                  
+                  log(`📊 Display après fermeture: "${closedDisplay}"`, 'debug');
+                  
+                  if (isNowHidden) {
+                    log('✅ Fermeture fonctionne aussi!', 'success');
+                    addAnalysisResult('Fermeture Popup', 'La fermeture du popup fonctionne correctement', 'success');
+                  } else {
+                    log('⚠️ Fermeture partielle ou différée', 'warning');
+                    addAnalysisResult('Fermeture Popup', 'La fermeture du popup ne fonctionne pas immédiatement', 'warning');
+                  }
+                }, 300);
+              }, 2000);
+            }
+            
+          } else {
+            log('❌ ÉCHEC: Le popup ne s\'ouvre PAS', 'error');
+            log('🔍 La fonction s\'exécute mais ne change pas l\'affichage', 'error');
+            updateStatus('popup-state', 'Ne s\'ouvre pas', 'error');
+            addAnalysisResult('Test Popup', 'La fonction openPopup() s\'exécute sans erreur mais le popup ne devient pas visible. Problème probable dans le code de la fonction.', 'error');
+          }
+          
+          observer.disconnect();
+        }, 500);
+        
+      } catch (error) {
+        log(`❌ ERREUR d'exécution: ${error.message}`, 'error');
+        log(`🔍 Stack trace: ${error.stack}`, 'error');
+        updateStatus('popup-state', 'Erreur d\'exécution', 'error');
+        addAnalysisResult('Erreur Exécution', `Erreur lors de l'exécution de openPopup(): ${error.message}`, 'error');
+      }
+      
+      log('\n=================================', 'info');
+      log('🏁 FIN DU TEST POPUP', 'info');
+    }
+    
+    async function testButtonClick() {
+      log('\n🎯 TEST SIMULATION CLIC BOUTON', 'info');
+      log('==============================', 'info');
+      
+      const button = document.getElementById('open-rating-popup');
+      if (!button) {
+        log('❌ Bouton introuvable', 'error');
+        return;
+      }
+      
+      log('🔥 Simulation du clic utilisateur...', 'warning');
+      
+      try {
+        // Simuler un clic réel
+        const clickEvent = new MouseEvent('click', {
+          bubbles: true,
+          cancelable: true,
+          view: window
+        });
+        
+        button.dispatchEvent(clickEvent);
+        log('✅ Événement click dispatché', 'success');
+        
+        // Vérifier le résultat
+        setTimeout(() => {
+          const popup = document.getElementById('rating-popup');
+          if (popup) {
+            const isVisible = popup.style.display === 'flex' || popup.style.display === 'block';
+            log(`📊 Popup visible après clic simulé: ${isVisible ? 'OUI' : 'NON'}`, isVisible ? 'success' : 'error');
+            
+            if (isVisible) {
+              addAnalysisResult('Simulation Clic', 'Le clic simulé ouvre correctement le popup', 'success');
+            } else {
+              addAnalysisResult('Simulation Clic', 'Le clic simulé ne parvient pas à ouvrir le popup', 'error');
+            }
+          }
+        }, 500);
+        
+      } catch (error) {
+        log(`❌ Erreur simulation clic: ${error.message}`, 'error');
+        addAnalysisResult('Simulation Clic', `Erreur lors de la simulation: ${error.message}`, 'error');
+      }
+    }
+    
+    async function testAllFunctions() {
+      log('\n⚡ TEST DE TOUTES LES FONCTIONS', 'info');
+      log('===============================', 'info');
+      
+      const functions = [
+        { name: 'window.currentUser', test: () => typeof window.currentUser === 'function' },
+        { name: 'window.avisSys.openPopup', test: () => window.avisSys && typeof window.avisSys.openPopup === 'function' },
+        { name: 'window.avisSys.closePopup', test: () => window.avisSys && typeof window.avisSys.closePopup === 'function' },
+        { name: 'window.avisSys.ajouterAvis', test: () => window.avisSys && typeof window.avisSys.ajouterAvis === 'function' },
+        { name: 'window.chargerMenuDuJour', test: () => typeof window.chargerMenuDuJour === 'function' },
+        { name: 'window.renderAccountArea', test: () => typeof window.renderAccountArea === 'function' }
+      ];
+      
+      let successCount = 0;
+      
+      for (const func of functions) {
+        try {
+          const result = func.test();
+          if (result) {
+            log(`✅ ${func.name} - Disponible`, 'success');
+            successCount++;
+          } else {
+            log(`❌ ${func.name} - Manquante`, 'error');
+          }
+        } catch (error) {
+          log(`❌ ${func.name} - Erreur: ${error.message}`, 'error');
+        }
+      }
+      
+      const percentage = Math.round((successCount / functions.length) * 100);
+      log(`📊 Score: ${successCount}/${functions.length} (${percentage}%)`, percentage > 80 ? 'success' : 'warning');
+      
+      updateStatus('functions-state', `${successCount}/${functions.length} OK`, percentage > 80 ? 'success' : 'warning');
+      addAnalysisResult('Test Fonctions', `${successCount} fonctions sur ${functions.length} sont disponibles (${percentage}%)`, percentage > 80 ? 'success' : 'warning');
+    }
+    
+    async function testAuthFlow() {
+      log('\n🔐 TEST FLUX AUTHENTIFICATION', 'info');
+      log('============================', 'info');
+      
+      try {
+        if (typeof window.currentUser === 'function') {
+          const user = window.currentUser();
+          
+          if (user) {
+            log(`✅ Utilisateur connecté: ${user.name || 'Sans nom'}`, 'success');
+            log(`📧 Email: ${user.email || 'Non défini'}`, 'info');
+            log(`👤 Rôle: ${user.role || 'Non défini'}`, 'info');
+            addAnalysisResult('Authentification', `Utilisateur connecté: ${user.name} (${user.role})`, 'success');
+          } else {
+            log('ℹ️ Aucun utilisateur connecté', 'info');
+            addAnalysisResult('Authentification', 'Aucun utilisateur actuellement connecté', 'warning');
+          }
+        } else {
+          log('❌ Fonction currentUser non disponible', 'error');
+          addAnalysisResult('Authentification', 'Système d\'authentification non initialisé', 'error');
+        }
+      } catch (error) {
+        log(`❌ Erreur test auth: ${error.message}`, 'error');
+        addAnalysisResult('Authentification', `Erreur: ${error.message}`, 'error');
+      }
+    }
+    
+    // Initialisation
+    document.addEventListener('DOMContentLoaded', () => {
+      log('🔧 Système de test d\'exécution initialisé');
+      log('Prêt à tester les fonctions en temps réel...\n');
+    });
+  </script>
+</body>
+</html>

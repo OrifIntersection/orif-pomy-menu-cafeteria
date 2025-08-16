@@ -1,0 +1,15 @@
+{
+  "2025-08-14": {
+    "platDuJour": {
+      "nom": "Poulet au curry",
+      "desc": "Riz basmati, légumes vapeur", 
+      "img": "plat_jour.jpg",
+      "badges": ["veg?false", "gluten?true", "lactose?true"]
+    },
+    "dessert": "Crème brûlée maison",
+    "self": ["Pâtes bolognaises", "Pizza 4 fromages", "Gratin de légumes"],
+    "salades": ["Laitue", "Roquette", "Carottes", "Œufs", "Thon", "Maïs"],
+    "vegetarien": "Chili sin carne",
+    "avis": []
+  }
+}

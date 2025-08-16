@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Popup - ORIF</title>
+  <link rel="stylesheet" href="./style.css">
+  <style>
+    .test-container {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: #424549;
+      color: white;
+      border-radius: 8px;
+    }
+    
+    .test-button {
+      background: #2b5a87;
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      margin: 1rem 0;
+    }
+    
+    .test-button:hover {
+      background: #1e4a73;
+    }
+  </style>
+</head>
+<body>
+  <div class="test-container">
+    <h1>🧪 Test Popup Avis ORIF</h1>
+    <p>Cette page teste uniquement le système de popup d'avis.</p>
+    
+    <button id="open-rating-popup" class="test-button">
+      🌟 Donner mon avis (TEST)
+    </button>
+    
+    <div style="margin: 2rem 0;">
+      <h3>État du système :</h3>
+      <div id="test-status"></div>
+    </div>
+    
+    <a href="./index.html" class="test-button">🏠 Retour à l'accueil</a>
+  </div>
+
+  <!-- Popup copié d'index.html -->
+  <div id="rating-popup" class="popup-overlay" style="display: none;">
+    <div class="popup-content">
+      <div class="popup-header">
+        <h3>Votre avis compte</h3>
+        <button id="close-rating-popup" class="popup-close">×</button>
+      </div>
+      <div class="popup-body">
+        <div id="rating-form-popup">
+          <p>Notez le menu d'aujourd'hui :</p>
+          <div class="rating-stars">
+            <span class="star" data-rating="1">★</span>
+            <span class="star" data-rating="2">★</span>
+            <span class="star" data-rating="3">★</span>
+            <span class="star" data-rating="4">★</span>
+            <span class="star" data-rating="5">★</span>
+          </div>
+          <textarea id="comment-popup" placeholder="Votre commentaire (optionnel)..." rows="3"></textarea>
+          <div class="popup-buttons">
+            <button id="submit-rating-popup" class="btn btn-primary">Envoyer</button>
+            <button id="cancel-rating-popup" class="btn btn-secondary">Annuler</button>
+          </div>
+        </div>
+        <div id="rating-login-popup" style="display: none;">
+          <p>Vous devez être connecté en tant que membre pour donner votre avis.</p>
+          <div class="popup-buttons">
+            <a href="./login.html" class="btn btn-primary">Se connecter</a>
+            <button id="cancel-login-popup" class="btn btn-secondary">Annuler</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="./app.js"></script>
+  <script src="./member.js"></script>
+  <script src="./avis-system.js"></script>
+  
+  <script>
+    // Test simple du bouton
+    document.addEventListener('DOMContentLoaded', () => {
+      const statusDiv = document.getElementById('test-status');
+      let status = '';
+      
+      setTimeout(() => {
+        // Tester les éléments
+        const btn = document.getElementById('open-rating-popup');
+        const popup = document.getElementById('rating-popup');
+        const currentUserFunc = window.currentUser;
+        const openFunc = window.openRatingPopup;
+        
+        status += `🎯 Bouton: ${btn ? '✅ TROUVÉ' : '❌ MANQUANT'}<br>`;
+        status += `🎯 Popup: ${popup ? '✅ TROUVÉ' : '❌ MANQUANT'}<br>`;
+        status += `🎯 currentUser: ${currentUserFunc ? '✅ TROUVÉ' : '❌ MANQUANT'}<br>`;
+        status += `🎯 Système avis: ${typeof window.ajouterAvis === 'function' ? '✅ CHARGÉ' : '❌ MANQUANT'}<br>`;
+        
+        // Test direct du clic
+        if (btn) {
+          status += `🎯 Événement click: ${btn.onclick ? '✅ ATTACHÉ' : '❌ MANQUANT'}<br>`;
+        }
+        
+        statusDiv.innerHTML = status;
+      }, 1000);
+    });
+  </script>
+</body>
+</html>

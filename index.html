@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Menu ORIF - Menu du jour</title>
+  <link rel="stylesheet" href="./style.css"/>
+  <link rel="stylesheet" href="./responsive.css"/>
+</head>
+<body>
+  <header>
+    <div class="logo-container">
+      <img src="./logo-orif.png" alt="Logo ORIF" class="logo-orif" />
+      <div>
+        <h1>Menu du jour – ORIF-POMY</h1>
+        <p class="date" id="date-actuelle">Mercredi 14 août 2025</p>
+      </div>
+    </div>
+
+    <div class="user-options">
+      <div id="account-area">
+        <a class="btn" href="./login.html">Se connecter</a>
+      </div>
+      <select name="langue" id="langue">
+        <option value="fr">FR</option>
+        <option value="en">EN</option>
+        <option value="de">DE</option>
+      </select>
+    </div>
+  </header>
+
+  <nav class="header-nav">
+    <div class="nav-container">
+      <a href="#plat" class="nav-item active">Plat du jour</a>
+      <span class="nav-divider">|</span>
+      <a href="#dessert" class="nav-item">Dessert</a>
+      <span class="nav-divider">|</span>
+      <a href="#self" class="nav-item">Self-service</a>
+      <span class="nav-divider">|</span>
+      <a href="#salades" class="nav-item">Salades</a>
+      <span class="nav-divider">|</span>
+      <a href="#vegetarien" class="nav-item">Plat végétarien</a>
+    </div>
+  </nav>
+
+  <div class="main-layout">
+    <!-- Contenu principal large -->
+    <main class="content">
+
+      <!-- PLAT DU JOUR -->
+      <section id="plat" class="section-card" data-menu-today="true">
+        <h2>Plat du jour</h2>
+        <div class="badges" id="plat-badges"></div>
+        <img id="plat-img" src="./plat_jour.jpg" alt="Plat du jour"/>
+        <p><strong>Nom :</strong> <span id="plat-nom">Poulet au curry</span></p>
+        <div id="menu-today" style="display: none;">Menu du jour chargé</div>
+        <p><strong>Description :</strong> <span id="plat-desc">Riz basmati, légumes vapeur</span></p>
+        
+        <!-- Section avis attachée au menu du jour -->
+        <div id="avis-section">
+          <div class="avis-header-section">
+            <h3>Avis sur le menu d'aujourd'hui</h3>
+            <button id="open-rating-popup" onclick="openSimplePopup()" class="btn btn-rating">Donner mon avis</button>
+          </div>
+          <div id="moyenne-avis" class="moyenne-avis">Moyenne : <span id="moyenne-note">0</span>/5</div>
+          <ul id="avis-list">
+            <li class="aucun-avis">Aucun avis pour aujourd'hui</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- DESSERT -->
+      <section id="dessert" class="section-card">
+        <h2>Dessert du jour</h2>
+        <div class="badges" id="dessert-badges"></div>
+        <p id="dessert-content">Crème brûlée maison avec éclats de caramel</p>
+      </section>
+
+      <!-- SELF -->
+      <section id="self" class="section-card">
+        <h2>Self-service du jour</h2>
+        <ul id="self-list">
+          <li>Pâtes bolognaises</li>
+          <li>Pizza 4 fromages</li>
+          <li>Gratin de légumes</li>
+        </ul>
+      </section>
+
+      <!-- SALADES -->
+      <section id="salades" class="section-card">
+        <h2>Bar à salades</h2>
+        <p>Composez votre salade avec :</p>
+        <ul id="salades-list">
+          <li>Laitue, roquette, carottes râpées</li>
+          <li>Œufs, thon, maïs, tomates cerises</li>
+          <li>Vinaigrette maison, sauce yogourt</li>
+        </ul>
+      </section>
+
+      <!-- VÉGÉ -->
+      <section id="vegetarien" class="section-card">
+        <h2>Plat végétarien</h2>
+        <div class="badges">
+          <span class="badge badge--veg" title="Plat végétarien"><span class="emoji">🥦</span> Végé</span>
+        </div>
+        <p id="veg-content">Chili sin carne aux haricots rouges et riz parfumé.</p>
+      </section>
+
+
+
+      <!-- ALLERGÈNES -->
+      <section id="allergenes" class="section-card">
+        <h2>Ingrédients & Allergènes</h2>
+        <div class="badges">
+          <span class="badge badge--warn"><span class="emoji">🌾</span> Gluten</span>
+          <span class="badge badge--warn"><span class="emoji">🥛</span> Lactose</span>
+          <span class="badge badge--warn"><span class="emoji">🥚</span> Œuf</span>
+          <span class="badge badge--alert"><span class="emoji">🥜</span> Fruits à coque</span>
+        </div>
+        <ul>
+          <li>Contient : gluten, lactose, œufs</li>
+          <li>Sans : arachides</li>
+          <li>Option sans gluten disponible sur demande</li>
+        </ul>
+      </section>
+
+
+    </main>
+
+    <!-- Sidebar unique combinée -->
+    <aside class="sidebar-combined">
+      <div class="section">
+        <h3>Agenda</h3>
+        <div class="agenda">
+          <label for="filtre-date">Filtrer par date :</label>
+          <input type="date" id="filtre-date" />
+          <button id="btn-chercher-menu" class="btn-mini btn-chercher-menu">Chercher menu</button>
+          <div id="recherche-status" class="recherche-status"></div>
+        </div>
+        <div id="menu-history">
+          <!-- Les menus enregistrés apparaîtront ici -->
+        </div>
+        <div class="agenda-item">
+          <label>
+            <input type="checkbox" /> 
+            Formation cuisine - Jeudi 15/08
+          </label>
+        </div>
+        <div class="agenda-item">
+          <label>
+            <input type="checkbox" /> 
+            Soirée dégustation - Vendredi 16/08
+          </label>
+        </div>
+      </div>
+
+      <!-- CHEF déplacé dans la colonne de droite -->
+      <div class="section">
+        <h3>👨‍🍳 Chef du jour</h3>
+        <img id="chef-photo-sidebar" src="./Philippe_Etchebest.jpg" alt="Chef" class="chef-photo-sidebar"/>
+        <p class="chef-nom"><strong id="chef-nom-sidebar">Philippe Etchebest</strong></p>
+        <p id="chef-description-sidebar" class="chef-description">Chef passionné par la cuisine du monde et la valorisation des produits locaux.</p>
+        <div id="chef-admin-controls" class="chef-admin-controls">
+          <a href="./chef-management.html" class="btn-mini chef-edit-btn">✏️ Modifier</a>
+        </div>
+      </div>
+
+      <!-- HORAIRES déplacés dans la colonne de droite -->
+      <div class="section">
+        <h3>🕐 Horaires</h3>
+        <ul class="horaires-list">
+          <li><strong>Petit déjeuner :</strong> 07h05 – 07h45</li>
+          <li><strong>Cafétéria :</strong> 12h00 – 12h45</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h3>Informations</h3>
+        <p style="color: #666; font-size: 0.9rem; line-height: 1.4;">
+          Retrouvez ici les dernières actualités de la cafétéria ORIF-POMY.
+        </p>
+        <ul style="font-size: 0.85rem; color: #555; line-height: 1.4;">
+          <li>Nouvelle carte des desserts</li>
+          <li>Produits locaux privilégiés</li>
+          <li>Options végétariennes étendues</li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+
+  <!-- POPUP SIMPLE -->
+  <div id="simple-popup" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000;">
+    <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); background:white; padding:20px; border-radius:8px; width:400px;">
+      <h3>Votre avis</h3>
+      <p>Notez le menu :</p>
+      <div id="simple-stars">
+        <span onclick="setRating(1)" style="font-size:30px; cursor:pointer; color:#ddd;">★</span>
+        <span onclick="setRating(2)" style="font-size:30px; cursor:pointer; color:#ddd;">★</span>
+        <span onclick="setRating(3)" style="font-size:30px; cursor:pointer; color:#ddd;">★</span>
+        <span onclick="setRating(4)" style="font-size:30px; cursor:pointer; color:#ddd;">★</span>
+        <span onclick="setRating(5)" style="font-size:30px; cursor:pointer; color:#ddd;">★</span>
+      </div>
+      <textarea id="simple-comment" placeholder="Commentaire..." rows="3" style="width:100%; margin:10px 0;"></textarea>
+      <button id="submit-simple-rating" onclick="submitSimpleRating()" style="background:#007bff; color:white; padding:8px 16px; border:none; border-radius:4px; margin-right:10px;">Envoyer</button>
+      <button onclick="closeSimplePopup()" style="background:#6c757d; color:white; padding:8px 16px; border:none; border-radius:4px;">Fermer</button>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 ORIF – Tous droits réservés</p>
+    <div class="footer-links">
+      <a href="#">Mentions légales</a>
+      <a href="#">Conditions d'utilisation</a>
+      <a href="#">Politique de confidentialité</a>
+      <a href="#">Accessibilité</a>
+    </div>
+  </footer>
+
+  <script src="./app.js"></script>
+  <script src="./member.js"></script>
+  <script>
+    let currentRating = 0;
+    
+    function openSimplePopup() {
+      document.getElementById('simple-popup').style.display = 'block';
+    }
+    
+    function closeSimplePopup() {
+      document.getElementById('simple-popup').style.display = 'none';
+      currentRating = 0;
+      updateStars();
+      document.getElementById('simple-comment').value = '';
+    }
+    
+    function setRating(rating) {
+      currentRating = rating;
+      updateStars();
+      console.log('Note sélectionnée:', rating);
+    }
+    
+    function updateStars() {
+      const stars = document.querySelectorAll('#simple-stars span');
+      stars.forEach((star, index) => {
+        star.style.color = index < currentRating ? '#ffcc00' : '#ddd';
+      });
+    }
+    
+    function submitSimpleRating() {
+      if (currentRating === 0) {
+        alert('Veuillez sélectionner une note');
+        return;
+      }
+      
+      const user = currentUser();
+      if (!user) {
+        alert('Veuillez vous connecter pour donner votre avis');
+        return;
+      }
+      
+      const comment = document.getElementById('simple-comment').value;
+      const dateAujourdhui = new Date().toISOString().split('T')[0];
+      
+      // Vérifier si l'utilisateur a déjà donné un avis aujourd'hui
+      const existingAvis = JSON.parse(localStorage.getItem('orif_avis') || '[]');
+      const avisExistant = existingAvis.find(a => a.date === dateAujourdhui && a.userId === user.email);
+      
+      if (avisExistant) {
+        const modifier = confirm('Vous avez déjà donné un avis aujourd\'hui. Voulez-vous le modifier ?');
+        if (!modifier) return;
+        
+        // Modifier l'avis existant
+        avisExistant.rating = currentRating;
+        avisExistant.comment = comment;
+        avisExistant.timestamp = Date.now();
+      } else {
+        // Créer un nouvel avis
+        const nouvelAvis = {
+          date: dateAujourdhui,
+          rating: currentRating,
+          comment: comment,
+          timestamp: Date.now(),
+          userId: user.email,
+          userName: user.name
+        };
+        existingAvis.push(nouvelAvis);
+      }
+      
+      localStorage.setItem('orif_avis', JSON.stringify(existingAvis));
+      alert('Merci pour votre avis !');
+      closeSimplePopup();
+      chargerAvisAujourdhui();
+    }
+    
+    // Fonction pour charger et afficher les avis d'aujourd'hui
+    function chargerAvisAujourdhui() {
+      try {
+        const existingAvis = JSON.parse(localStorage.getItem('orif_avis') || '[]');
+        const dateAujourdhui = new Date().toISOString().split('T')[0];
+        const avisAujourdhui = existingAvis.filter(avis => avis.date === dateAujourdhui);
+        
+        const avisList = document.getElementById('avis-list');
+        const moyenneNote = document.getElementById('moyenne-note');
+        
+        console.log('DEBUG AVIS - Total:', existingAvis.length, 'Aujourd\'hui:', avisAujourdhui.length);
+        
+        if (!avisList || !moyenneNote) {
+          console.error('Éléments DOM avis-list ou moyenne-note introuvables');
+          return;
+        }
+        
+        if (avisAujourdhui.length === 0) {
+          avisList.innerHTML = '<li class="aucun-avis">Aucun avis pour aujourd\'hui</li>';
+          moyenneNote.textContent = '0';
+        } else {
+          const moyenne = avisAujourdhui.reduce((sum, avis) => sum + avis.rating, 0) / avisAujourdhui.length;
+          moyenneNote.textContent = moyenne.toFixed(1);
+          
+          const currentUserEmail = currentUser()?.email;
+          avisList.innerHTML = avisAujourdhui.map(avis => `
+            <li class="avis-item">
+              <div class="avis-header">
+                <div class="avis-rating">${'★'.repeat(avis.rating)}${'☆'.repeat(5-avis.rating)}</div>
+                <small class="avis-author">${avis.userName || 'Anonyme'}</small>
+                ${avis.userId === currentUserEmail ? `
+                  <div class="avis-actions">
+                    <button onclick="modifierAvis('${avis.timestamp}')" class="btn-mini">✏️</button>
+                    <button onclick="supprimerAvis('${avis.timestamp}')" class="btn-mini btn-delete">🗑️</button>
+                  </div>
+                ` : ''}
+              </div>
+              ${avis.comment ? `<p class="avis-comment">${avis.comment}</p>` : ''}
+              <small class="avis-time">${new Date(avis.timestamp).toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'})}</small>
+            </li>
+          `).join('');
+          
+          console.log('Avis affichés avec succès - Moyenne:', moyenne.toFixed(1));
+        }
+      } catch (error) {
+        console.error('Erreur chargement avis - DÉTAIL:', error.message, error.stack);
+        // Vérifier si les éléments DOM existent
+        if (!avisList) console.error('DOM ERROR: avis-list introuvable');
+        if (!moyenneNote) console.error('DOM ERROR: moyenne-note introuvable');
+      }
+    }
+    
+    function modifierAvis(timestamp) {
+      const existingAvis = JSON.parse(localStorage.getItem('orif_avis') || '[]');
+      const avis = existingAvis.find(a => a.timestamp == timestamp);
+      if (avis) {
+        currentRating = avis.rating;
+        document.getElementById('simple-comment').value = avis.comment || '';
+        updateStars();
+        openSimplePopup();
+      }
+    }
+    
+    function supprimerAvis(timestamp) {
+      if (confirm('Êtes-vous sûr de vouloir supprimer votre avis ?')) {
+        const existingAvis = JSON.parse(localStorage.getItem('orif_avis') || '[]');
+        const nouveauxAvis = existingAvis.filter(a => a.timestamp != timestamp);
+        localStorage.setItem('orif_avis', JSON.stringify(nouveauxAvis));
+        chargerAvisAujourdhui();
+      }
+    }
+    
+    // Charger les avis au démarrage
+    document.addEventListener('DOMContentLoaded', () => {
+      chargerAvisAujourdhui();
+    });
+  </script>
+  <script>
+    // Charger les informations du chef depuis localStorage
+    function chargerInfoChef() {
+      const chefInfo = JSON.parse(localStorage.getItem('orif_chef_info') || '{}');
+      const chef = {
+        nom: chefInfo.nom || "Monsieur Philippe Etchebest",
+        description: chefInfo.description || "Chef passionné par la cuisine du monde et la valorisation des produits locaux. Présent à l'ORIF depuis 8 ans.",
+        photo: chefInfo.photo || "./Philippe_Etchebest.jpg"
+      };
+      
+      const nomElement = document.getElementById('chef-nom');
+      const photoElement = document.getElementById('chef-photo');
+      const descElement = document.getElementById('chef-description');
+      
+      if (nomElement) nomElement.textContent = chef.nom;
+      if (photoElement) {
+        photoElement.src = chef.photo;
+        photoElement.alt = 'Chef ' + chef.nom;
+      }
+      if (descElement) descElement.textContent = chef.description;
+    }
+
+    // Charger les infos du chef au démarrage
+    document.addEventListener('DOMContentLoaded', () => {
+      chargerInfoChef();
+    });
+
+    // Écouter les changements du localStorage pour mettre à jour automatiquement
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'orif_chef_info') {
+        chargerInfoChef();
+      }
+    });
+  </script>
+
+  <script>
+    // SOLUTION RADICALE - INITIALISATION COMPLÈTE
+    (function() {
+      'use strict';
+      
+      // Charger les informations du chef
+      function chargerInfoChef() {
+        try {
+          const chefInfo = JSON.parse(localStorage.getItem('orif_chef_info') || '{}');
+          const chef = {
+            nom: chefInfo.nom || "Monsieur Philippe Etchebest",
+            description: chefInfo.description || "Chef passionné par la cuisine du monde et la valorisation des produits locaux. Présent à l'ORIF depuis 8 ans.",
+            photo: chefInfo.photo || "./Philippe_Etchebest.jpg"
+          };
+          
+          const nomElement = document.getElementById('chef-nom');
+          const photoElement = document.getElementById('chef-photo');
+          const descElement = document.getElementById('chef-description');
+          
+          if (nomElement) nomElement.textContent = chef.nom;
+          if (photoElement) {
+            photoElement.src = chef.photo;
+            photoElement.alt = 'Chef ' + chef.nom;
+          }
+          if (descElement) descElement.textContent = chef.description;
+          
+          console.log('Chef chargé:', chef.nom);
+        } catch (error) {
+          console.error('Erreur chargement chef:', error);
+        }
+      }
+
+      // Initialisation principale
+      function init() {
+        console.log('INITIALISATION COMPLÈTE DE LA PAGE');
+        
+        // Charger les infos chef
+        chargerInfoChef();
+        
+        // Initialiser les fonctions de membres
+        if (typeof initMemberFeatures === 'function') {
+          initMemberFeatures();
+        }
+        
+        // Gestion des paramètres URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const dateParam = urlParams.get('date');
+        
+        // Charger le menu du jour
+        if (dateParam && typeof chargerMenuDuJour === 'function') {
+          console.log('Date spécifique demandée:', dateParam);
+          chargerMenuDuJour(dateParam);
+          const filterInput = document.getElementById('filtre-date');
+          if (filterInput) filterInput.value = dateParam;
+        } else if (typeof chargerMenuDuJour === 'function') {
+          chargerMenuDuJour();
+        }
+        
+        console.log('✅ Initialisation terminée');
+      }
+
+      // Attendre le DOM et initialiser
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        setTimeout(init, 100);
+      }
+
+      // Écouter les changements du localStorage
+      window.addEventListener('storage', (e) => {
+        if (e.key === 'orif_chef_info') {
+          chargerInfoChef();
+        }
+      });
+
+    })();
+
+  </script>
+  
+  <footer style="background: #2c3e50; color: white; text-align: center; padding: 2rem 1rem 1rem; margin-top: 2rem;">
+    <p style="margin: 0 0 1rem 0; color: white;">© 2025 ORIF – Tous droits réservés</p>
+    <div class="footer-links" style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
+      <a href="#" style="color: #bdc3c7; text-decoration: none; font-size: 0.9rem;">Mentions légales</a>
+      <a href="#" style="color: #bdc3c7; text-decoration: none; font-size: 0.9rem;">Conditions d'utilisation</a>
+      <a href="#" style="color: #bdc3c7; text-decoration: none; font-size: 0.9rem;">Politique de confidentialité</a>
+      <a href="#" style="color: #bdc3c7; text-decoration: none; font-size: 0.9rem;">Accessibilité</a>
+    </div>
+  </footer>
+</body>
+</html>
+      });
+      
+      // Double-clic pour effacer le filtre
+      filterDateInput.addEventListener('dblclick', () => {
+        filterDateInput.value = '';
+        chargerMenuDuJour();
+        loadMenuHistoryInAgenda();
+        if (statusDiv) statusDiv.innerHTML = '';
+      });
+    }
+
+    // Écouter les changements de localStorage pour mettre à jour l'agenda
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'orif_menu_history') {
+        loadMenuHistoryInAgenda();
+      }
+    });
+
+    // Recharger l'agenda toutes les 2 secondes pour détecter les changements
+    setInterval(() => {
+      loadMenuHistoryInAgenda();
+    }, 2000);
+  </script>
+  
+  <footer style="background: #2c3e50; color: white; text-align: center; padding: 2rem 1rem 1rem; margin-top: 2rem;">
+    <p style="margin: 0 0 1rem 0; color: white;">© 2025 ORIF – Tous droits réservés</p>
+    <div class="footer-links" style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
+      <a href="#" style="color: #bdc3c7; text-decoration: none; font-size: 0.9rem;">Mentions légales</a>
+      <a href="#" style="color: #bdc3c7; text-decoration: none; font-size: 0.9rem;">Conditions d'utilisation</a>
+      <a href="#" style="color: #bdc3c7; text-decoration: none; font-size: 0.9rem;">Politique de confidentialité</a>
+      <a href="#" style="color: #bdc3c7; text-decoration: none; font-size: 0.9rem;">Accessibilité</a>
+    </div>
+  </footer>
+</body>
+</html>
